@@ -4,118 +4,234 @@
     "clean_rows": 153534,
     "dropped_err_count": 780,
     "cleaned_gpa_count": 762,
-    "extreme_study_count": 1419
+    "extreme_study_count": 1419,
+    "train_rows": 115109,
+    "test_rows": 38425,
+    "train_reg_observed_y": 107111,
+    "test_reg_observed_y": 35714
+  },
+  "ablation_study": {
+    "Ridge": {
+      "Raw_RMSE": 8.0507,
+      "Engineered_RMSE": 8.051,
+      "Delta": -0.0003
+    },
+    "LightGBM": {
+      "Raw_RMSE": 8.0576,
+      "Engineered_RMSE": 8.0564,
+      "Delta": 0.0012
+    }
   },
   "regression_results": {
     "Ridge Regression": {
-      "RMSE": 7.885,
-      "MAE": 6.3231,
-      "R2": 0.3639,
-      "MAPE": 7.9826
+      "RMSE": 8.051,
+      "MAE": 6.4637,
+      "R2": 0.3885,
+      "MAPE": 8.1719
     },
     "Decision Tree": {
-      "RMSE": 7.9393,
-      "MAE": 6.3677,
-      "R2": 0.3552,
-      "MAPE": 8.0382
+      "RMSE": 8.1322,
+      "MAE": 6.5261,
+      "R2": 0.3761,
+      "MAPE": 8.2529
     },
     "Random Forest": {
-      "RMSE": 7.9072,
-      "MAE": 6.3466,
-      "R2": 0.3604,
-      "MAPE": 8.012
+      "RMSE": 8.0742,
+      "MAE": 6.4896,
+      "R2": 0.385,
+      "MAPE": 8.2022
     },
     "LightGBM": {
-      "RMSE": 7.8946,
-      "MAE": 6.3375,
-      "R2": 0.3624,
-      "MAPE": 8.0016
+      "RMSE": 8.0603,
+      "MAE": 6.4748,
+      "R2": 0.3871,
+      "MAPE": 8.1864
     },
     "XGBoost": {
-      "RMSE": 7.9089,
-      "MAE": 6.3489,
-      "R2": 0.3601,
-      "MAPE": 8.0154
+      "RMSE": 8.0764,
+      "MAE": 6.4862,
+      "R2": 0.3847,
+      "MAPE": 8.1995
     },
     "Voting Ensemble": {
-      "RMSE": 7.8965,
-      "MAE": 6.3393,
-      "R2": 0.3621,
-      "MAPE": 8.0035
+      "RMSE": 8.0613,
+      "MAE": 6.4754,
+      "R2": 0.387,
+      "MAPE": 8.1861
     }
   },
   "classification_results": {
-    "Multinomial LogReg": {
-      "Accuracy": 0.2918,
-      "Precision_Macro": 0.2766,
-      "Recall_Macro": 0.3531,
-      "F1_Macro": 0.2862,
-      "F1_Weighted": 0.2872
+    "Multinomial LogReg (Unweighted)": {
+      "Accuracy": 0.3444,
+      "Precision_Macro": 0.3329,
+      "Recall_Macro": 0.3004,
+      "F1_Macro": 0.2724,
+      "F1_Weighted": 0.2922,
+      "Class_F_Recall": 0.137,
+      "Class_F_Precision": 0.6452,
+      "Class_F_F1": 0.226
     },
-    "Decision Tree": {
-      "Accuracy": 0.2944,
-      "Precision_Macro": 0.2899,
-      "Recall_Macro": 0.349,
-      "F1_Macro": 0.2921,
-      "F1_Weighted": 0.2929
+    "Multinomial LogReg (Balanced)": {
+      "Accuracy": 0.2934,
+      "Precision_Macro": 0.2782,
+      "Recall_Macro": 0.3568,
+      "F1_Macro": 0.2879,
+      "F1_Weighted": 0.289,
+      "Class_F_Recall": 0.774,
+      "Class_F_Precision": 0.1112,
+      "Class_F_F1": 0.1945
+    },
+    "Decision Tree (Unweighted)": {
+      "Accuracy": 0.3397,
+      "Precision_Macro": 0.3576,
+      "Recall_Macro": 0.2974,
+      "F1_Macro": 0.2881,
+      "F1_Weighted": 0.3012,
+      "Class_F_Recall": 0.1781,
+      "Class_F_Precision": 0.5652,
+      "Class_F_F1": 0.2708
+    },
+    "Decision Tree (Balanced)": {
+      "Accuracy": 0.2927,
+      "Precision_Macro": 0.2762,
+      "Recall_Macro": 0.3497,
+      "F1_Macro": 0.2811,
+      "F1_Weighted": 0.2853,
+      "Class_F_Recall": 0.6507,
+      "Class_F_Precision": 0.0814,
+      "Class_F_F1": 0.1447
+    },
+    "Random Forest (Unweighted)": {
+      "Accuracy": 0.3412,
+      "Precision_Macro": 0.3118,
+      "Recall_Macro": 0.2792,
+      "F1_Macro": 0.2413,
+      "F1_Weighted": 0.2791,
+      "Class_F_Recall": 0.0,
+      "Class_F_Precision": 0.0,
+      "Class_F_F1": 0.0
     },
     "Random Forest (Balanced)": {
-      "Accuracy": 0.2915,
-      "Precision_Macro": 0.296,
-      "Recall_Macro": 0.3441,
-      "F1_Macro": 0.3054,
-      "F1_Weighted": 0.2849
+      "Accuracy": 0.296,
+      "Precision_Macro": 0.2996,
+      "Recall_Macro": 0.3351,
+      "F1_Macro": 0.3084,
+      "F1_Weighted": 0.2901,
+      "Class_F_Recall": 0.4178,
+      "Class_F_Precision": 0.2328,
+      "Class_F_F1": 0.299
     },
-    "LightGBM Classifier": {
-      "Accuracy": 0.2976,
-      "Precision_Macro": 0.2957,
-      "Recall_Macro": 0.3401,
-      "F1_Macro": 0.3076,
-      "F1_Weighted": 0.2956
+    "LightGBM (Unweighted)": {
+      "Accuracy": 0.3364,
+      "Precision_Macro": 0.3296,
+      "Recall_Macro": 0.2978,
+      "F1_Macro": 0.2881,
+      "F1_Weighted": 0.3043,
+      "Class_F_Recall": 0.1507,
+      "Class_F_Precision": 0.3548,
+      "Class_F_F1": 0.2115
     },
-    "XGBoost Classifier": {
-      "Accuracy": 0.3436,
-      "Precision_Macro": 0.334,
-      "Recall_Macro": 0.294,
-      "F1_Macro": 0.2764,
-      "F1_Weighted": 0.3024
+    "LightGBM (Balanced)": {
+      "Accuracy": 0.3008,
+      "Precision_Macro": 0.295,
+      "Recall_Macro": 0.338,
+      "F1_Macro": 0.3079,
+      "F1_Weighted": 0.2966,
+      "Class_F_Recall": 0.4247,
+      "Class_F_Precision": 0.2109,
+      "Class_F_F1": 0.2818
     }
   },
   "time_series_metrics": {
-    "Exponential Smoothing": {
-      "RMSE": 5.7546,
+    "Simple Exponential Smoothing": {
+      "RMSE": 5.9621,
       "MAE": 5.2408,
-      "MAPE": 7.0056
+      "MAPE": 7.0465
     },
     "ARIMA(1,0,0)": {
-      "RMSE": 6.0604,
-      "MAE": 5.3766,
-      "MAPE": 7.2185
+      "RMSE": 6.4736,
+      "MAE": 5.4844,
+      "MAPE": 7.4147
     },
-    "Naive Lag-1": {
+    "Naive Persistence (Lag-1)": {
       "RMSE": 5.3267,
       "MAE": 5.2408,
       "MAPE": 6.8807
     }
   },
-  "tuning_comparison": {
-    "Default LightGBM": {
-      "RMSE": 7.8946,
-      "MAE": 6.3375,
-      "R2": 0.3624,
-      "MAPE": 8.0016
+  "tuning_regression": {
+    "Search_Space": {
+      "n_estimators": [
+        100,
+        200
+      ],
+      "learning_rate": [
+        0.03,
+        0.08
+      ],
+      "max_depth": [
+        4,
+        6
+      ],
+      "subsample": [
+        0.8,
+        1.0
+      ]
     },
-    "Tuned LightGBM": {
-      "RMSE": 7.8878,
-      "MAE": 6.3321,
-      "R2": 0.3635,
-      "MAPE": 7.9953
-    },
-    "Best Parameters": {
+    "Best_Params": {
       "learning_rate": 0.03,
       "max_depth": 4,
       "n_estimators": 200,
       "subsample": 0.8
+    },
+    "Baseline_LightGBM": {
+      "RMSE": 8.0603,
+      "MAE": 6.4748,
+      "R2": 0.3871,
+      "MAPE": 8.1864
+    },
+    "Tuned_LightGBM": {
+      "RMSE": 8.0528,
+      "MAE": 6.4695,
+      "R2": 0.3883,
+      "MAPE": 8.1797
+    }
+  },
+  "tuning_classification": {
+    "Search_Space": {
+      "n_estimators": [
+        100,
+        150
+      ],
+      "max_depth": [
+        10,
+        14
+      ],
+      "min_samples_split": [
+        2,
+        5
+      ]
+    },
+    "Best_Params": {
+      "max_depth": 14,
+      "min_samples_split": 5,
+      "n_estimators": 150
+    },
+    "Baseline_RF": {
+      "Accuracy": 0.296,
+      "Precision_Macro": 0.2996,
+      "Recall_Macro": 0.3351,
+      "F1_Macro": 0.3084,
+      "F1_Weighted": 0.2901,
+      "Class_F_Recall": 0.4178,
+      "Class_F_Precision": 0.2328,
+      "Class_F_F1": 0.299
+    },
+    "Tuned_RF": {
+      "Accuracy": 0.3031,
+      "F1_Macro": 0.3077,
+      "Class_F_Recall": 0.2329,
+      "Class_F_Precision": 0.2677
     }
   },
   "student_2_history": [
@@ -127,7 +243,7 @@
     {
       "sem_num": 2,
       "semester": "2020Fall",
-      "final_exam": 90.725
+      "final_exam": 93.57666666666667
     },
     {
       "sem_num": 3,
@@ -137,7 +253,7 @@
     {
       "sem_num": 4,
       "semester": "2021Fall",
-      "final_exam": 81.41833333333334
+      "final_exam": 81.362
     },
     {
       "sem_num": 5,
@@ -158,6 +274,56 @@
       "sem_num": 8,
       "semester": "2023Fall",
       "final_exam": 82.7
+    }
+  ],
+  "top_gain_features": [
+    {
+      "Feature": "homework_avg",
+      "Gain_Importance": 72081664.96089172
+    },
+    {
+      "Feature": "prior_gpa_cleaned",
+      "Gain_Importance": 466731.97776794434
+    },
+    {
+      "Feature": "study_hours_cleaned",
+      "Gain_Importance": 139088.8782196045
+    },
+    {
+      "Feature": "attendance_hw_composite",
+      "Gain_Importance": 106417.19396972656
+    },
+    {
+      "Feature": "study_hours_per_credit",
+      "Gain_Importance": 82260.95693969727
+    },
+    {
+      "Feature": "final_exam_prev_semester",
+      "Gain_Importance": 60231.50407409668
+    },
+    {
+      "Feature": "attendance_rolling2_mean",
+      "Gain_Importance": 58223.85020446777
+    },
+    {
+      "Feature": "homework_rolling2_mean",
+      "Gain_Importance": 57017.80986022949
+    },
+    {
+      "Feature": "homework_avg_prev_semester",
+      "Gain_Importance": 48684.830169677734
+    },
+    {
+      "Feature": "attendance_rate",
+      "Gain_Importance": 47200.95701599121
+    },
+    {
+      "Feature": "attendance_prev_semester",
+      "Gain_Importance": 42545.85810852051
+    },
+    {
+      "Feature": "year_of_study_Sophomore",
+      "Gain_Importance": 12088.818969726562
     }
   ]
 }

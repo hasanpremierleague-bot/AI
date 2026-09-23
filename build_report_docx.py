@@ -1,7 +1,16 @@
 """
-Script to build the formal academic project report (Project_Report_IT7103.docx)
+Revised script to generate the official academic project report (Project_Report_IT7103.docx)
 for Bahrain Polytechnic - IT7103 Advanced AI Applications.
-Incorporates full narrative, mathematical formulations, metrics tables, and embedded high-res figures.
+Incorporates all 12 reviewer requirements:
+- Leakage-free chronological evaluation
+- Observed targets only
+- Exact metrics from updated pipeline_results.json
+- Ablation study
+- Balanced vs. unweighted classification comparison
+- Low-N forecasting critique
+- Honest reporting of winning models (Ridge, Naive persistence)
+- Split vs. Gain feature importance
+- 12 IEEE scholarly citations
 """
 
 import os
@@ -10,24 +19,23 @@ import docx
 from docx import Document
 from docx.shared import Inches, Pt, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
-from docx.enum.table import WD_TABLE_ALIGNMENT, WD_ALIGN_VERTICAL
-from docx.oxml import parse_xml, OxmlElement
-from docx.oxml.ns import nsdecls, qn
+from docx.enum.table import WD_TABLE_ALIGNMENT
+from docx.oxml import parse_xml
+from docx.oxml.ns import nsdecls
 
-# Load pipeline results
 with open('pipeline_results.json', 'r') as f:
     results = json.load(f)
 
 doc = Document()
 
-# Set standard 1-inch margins
+# Page Margins
 for section in doc.sections:
     section.top_margin = Inches(1.0)
     section.bottom_margin = Inches(1.0)
     section.left_margin = Inches(1.0)
     section.right_margin = Inches(1.0)
 
-# Colors
+# Color Palette
 COLOR_PRIMARY = RGBColor(0, 51, 102)     # Deep Navy
 COLOR_SECONDARY = RGBColor(74, 96, 122)  # Slate Steel Blue
 COLOR_DARK = RGBColor(34, 34, 34)        # Charcoal
@@ -35,14 +43,13 @@ COLOR_MUTED = RGBColor(100, 110, 120)    # Muted Grey
 HEX_PRIMARY = "003366"
 HEX_LIGHT_BG = "F4F6F9"
 HEX_ALT_ROW = "F9FAFC"
-HEX_BORDER = "CCCCCC"
 
 def set_cell_shading(cell, hex_color):
     tcPr = cell._tc.get_or_add_tcPr()
     shd = parse_xml(f'<w:shd {nsdecls("w")} w:fill="{hex_color}"/>')
     tcPr.append(shd)
 
-def set_cell_margins(cell, top=100, bottom=100, left=150, right=150):
+def set_cell_margins(cell, top=80, bottom=80, left=120, right=120):
     tcPr = cell._tc.get_or_add_tcPr()
     tcMar = parse_xml(f'<w:tcMar {nsdecls("w")}><w:top w:w="{top}" w:type="dxa"/><w:bottom w:w="{bottom}" w:type="dxa"/><w:left w:w="{left}" w:type="dxa"/><w:right w:w="{right}" w:type="dxa"/></w:tcMar>')
     tcPr.append(tcMar)
@@ -54,48 +61,36 @@ def add_heading_1(doc, text):
     p.paragraph_format.keep_with_next = True
     run = p.add_run(text)
     run.font.name = 'Arial'
-    run.font.size = Pt(16)
+    run.font.size = Pt(15)
     run.font.bold = True
     run.font.color.rgb = COLOR_PRIMARY
     return p
 
 def add_heading_2(doc, text):
     p = doc.add_paragraph()
-    p.paragraph_format.space_before = Pt(14)
+    p.paragraph_format.space_before = Pt(13)
     p.paragraph_format.space_after = Pt(4)
     p.paragraph_format.keep_with_next = True
     run = p.add_run(text)
     run.font.name = 'Arial'
-    run.font.size = Pt(13)
+    run.font.size = Pt(12)
     run.font.bold = True
     run.font.color.rgb = COLOR_SECONDARY
     return p
 
-def add_heading_3(doc, text):
-    p = doc.add_paragraph()
-    p.paragraph_format.space_before = Pt(10)
-    p.paragraph_format.space_after = Pt(2)
-    p.paragraph_format.keep_with_next = True
-    run = p.add_run(text)
-    run.font.name = 'Arial'
-    run.font.size = Pt(11)
-    run.font.bold = True
-    run.font.color.rgb = COLOR_DARK
-    return p
-
 def add_body_p(doc, text, bold_prefix=""):
     p = doc.add_paragraph()
-    p.paragraph_format.space_after = Pt(6)
+    p.paragraph_format.space_after = Pt(5)
     p.paragraph_format.line_spacing = 1.15
     if bold_prefix:
         r_pre = p.add_run(bold_prefix)
         r_pre.font.name = 'Arial'
-        r_pre.font.size = Pt(10.5)
+        r_pre.font.size = Pt(10)
         r_pre.font.bold = True
         r_pre.font.color.rgb = COLOR_DARK
     r_body = p.add_run(text)
     r_body.font.name = 'Arial'
-    r_body.font.size = Pt(10.5)
+    r_body.font.size = Pt(10)
     r_body.font.color.rgb = COLOR_DARK
     return p
 
@@ -104,79 +99,79 @@ def add_callout(doc, text, title=""):
     tbl.alignment = WD_TABLE_ALIGNMENT.CENTER
     cell = tbl.cell(0, 0)
     set_cell_shading(cell, HEX_LIGHT_BG)
-    set_cell_margins(cell, top=140, bottom=140, left=200, right=200)
+    set_cell_margins(cell, top=120, bottom=120, left=180, right=180)
     p = cell.paragraphs[0]
     p.paragraph_format.space_after = Pt(0)
     p.paragraph_format.line_spacing = 1.15
     if title:
         r_title = p.add_run(f"{title}: ")
         r_title.font.name = 'Arial'
-        r_title.font.size = Pt(10.5)
+        r_title.font.size = Pt(10)
         r_title.font.bold = True
         r_title.font.color.rgb = COLOR_PRIMARY
     r_txt = p.add_run(text)
     r_txt.font.name = 'Arial'
-    r_txt.font.size = Pt(10)
+    r_txt.font.size = Pt(9.5)
     r_txt.font.italic = True
     r_txt.font.color.rgb = COLOR_DARK
-    doc.add_paragraph().paragraph_format.space_after = Pt(4)
+    doc.add_paragraph().paragraph_format.space_after = Pt(3)
 
 def add_figure(doc, img_path, caption_text):
     if os.path.exists(img_path):
         p_img = doc.add_paragraph()
         p_img.alignment = WD_ALIGN_PARAGRAPH.CENTER
         p_img.paragraph_format.space_before = Pt(8)
-        p_img.paragraph_format.space_after = Pt(4)
+        p_img.paragraph_format.space_after = Pt(3)
         run_img = p_img.add_run()
-        run_img.add_picture(img_path, width=Inches(6.0))
+        run_img.add_picture(img_path, width=Inches(5.8))
         
         p_cap = doc.add_paragraph()
         p_cap.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        p_cap.paragraph_format.space_after = Pt(12)
+        p_cap.paragraph_format.space_after = Pt(10)
         r_cap = p_cap.add_run(caption_text)
         r_cap.font.name = 'Arial'
-        r_cap.font.size = Pt(9.5)
+        r_cap.font.size = Pt(9)
         r_cap.font.bold = True
         r_cap.font.color.rgb = COLOR_MUTED
 
 # ==================== COVER PAGE ====================
 p_inst = doc.add_paragraph()
 p_inst.alignment = WD_ALIGN_PARAGRAPH.CENTER
-p_inst.paragraph_format.space_before = Pt(10)
+p_inst.paragraph_format.space_before = Pt(8)
 p_inst.paragraph_format.space_after = Pt(2)
 r = p_inst.add_run("BAHRAIN POLYTECHNIC | بوليتكنك البحرين")
 r.font.name = 'Arial'
-r.font.size = Pt(14)
+r.font.size = Pt(13)
 r.font.bold = True
 r.font.color.rgb = COLOR_PRIMARY
 
 p_fac = doc.add_paragraph()
 p_fac.alignment = WD_ALIGN_PARAGRAPH.CENTER
-p_fac.paragraph_format.space_after = Pt(24)
+p_fac.paragraph_format.space_after = Pt(20)
 r = p_fac.add_run("Faculty of Engineering, Design and Information & Communications Technology")
 r.font.name = 'Arial'
-r.font.size = Pt(11)
+r.font.size = Pt(10.5)
 r.font.color.rgb = COLOR_SECONDARY
 
 p_title = doc.add_paragraph()
 p_title.alignment = WD_ALIGN_PARAGRAPH.CENTER
-p_title.paragraph_format.space_after = Pt(6)
+p_title.paragraph_format.space_after = Pt(5)
 r = p_title.add_run("ASSESSMENT COVER SHEET & PROJECT REPORT")
 r.font.name = 'Arial'
-r.font.size = Pt(20)
+r.font.size = Pt(18)
 r.font.bold = True
 r.font.color.rgb = COLOR_PRIMARY
 
 p_sub = doc.add_paragraph()
 p_sub.alignment = WD_ALIGN_PARAGRAPH.CENTER
-p_sub.paragraph_format.space_after = Pt(20)
+p_sub.paragraph_format.space_after = Pt(16)
 r = p_sub.add_run("Intelligent Academic Performance Analysis & Outcome Prediction Pipeline")
 r.font.name = 'Arial'
-r.font.size = Pt(13)
+r.font.size = Pt(12)
 r.font.italic = True
 r.font.color.rgb = COLOR_SECONDARY
 
-# Project Metadata Table
+# Metadata Table
 meta_tbl = doc.add_table(rows=6, cols=2)
 meta_tbl.alignment = WD_TABLE_ALIGNMENT.CENTER
 meta_data = [
@@ -185,21 +180,21 @@ meta_data = [
     ("Academic Stream & Group", "Stream 05 | Group 1"),
     ("Due Date", "15-Dec-2026 (11:55 PM)"),
     ("Learning Outcomes Assessed", "CILO 1 and CILO 2"),
-    ("Submission Deliverables", "Zipped Folder: 05_202303596.zip (Jupyter Notebook & Report)")
+    ("Deliverable Archive", "05_202303596.zip (Executed .ipynb & Report .docx)")
 ]
 for i, (k, v) in enumerate(meta_data):
     c0 = meta_tbl.cell(i, 0)
     c1 = meta_tbl.cell(i, 1)
     set_cell_shading(c0, HEX_LIGHT_BG)
-    set_cell_margins(c0, 80, 80, 120, 120)
-    set_cell_margins(c1, 80, 80, 120, 120)
+    set_cell_margins(c0, 60, 60, 100, 100)
+    set_cell_margins(c1, 60, 60, 100, 100)
     c0.width = Inches(2.2)
     c1.width = Inches(4.3)
     p0 = c0.paragraphs[0]
     p0.paragraph_format.space_after = Pt(0)
     r0 = p0.add_run(k)
     r0.font.name = 'Arial'
-    r0.font.size = Pt(9.5)
+    r0.font.size = Pt(9)
     r0.font.bold = True
     r0.font.color.rgb = COLOR_DARK
     
@@ -207,32 +202,31 @@ for i, (k, v) in enumerate(meta_data):
     p1.paragraph_format.space_after = Pt(0)
     r1 = p1.add_run(v)
     r1.font.name = 'Arial'
-    r1.font.size = Pt(9.5)
+    r1.font.size = Pt(9)
     r1.font.color.rgb = COLOR_DARK
 
-doc.add_paragraph().paragraph_format.space_after = Pt(10)
+doc.add_paragraph().paragraph_format.space_after = Pt(8)
 
 # Group Members Table
-p_grp_title = doc.add_paragraph()
-p_grp_title.paragraph_format.space_after = Pt(4)
-r = p_grp_title.add_run("Project Group Membership & Student Details:")
+p_grp = doc.add_paragraph()
+p_grp.paragraph_format.space_after = Pt(3)
+r = p_grp.add_run("Project Group Membership & Student Identification:")
 r.font.name = 'Arial'
-r.font.size = Pt(11)
+r.font.size = Pt(10)
 r.font.bold = True
 r.font.color.rgb = COLOR_PRIMARY
 
 grp_tbl = doc.add_table(rows=6, cols=3)
 grp_tbl.alignment = WD_TABLE_ALIGNMENT.CENTER
-headers = ["Student ID", "Student Full Name", "Project Role"]
-for j, h in enumerate(headers):
+for j, h in enumerate(["Student ID", "Full Name", "Project Role"]):
     c = grp_tbl.cell(0, j)
     set_cell_shading(c, HEX_PRIMARY)
-    set_cell_margins(c, 100, 100, 120, 120)
+    set_cell_margins(c, 80, 80, 100, 100)
     p = c.paragraphs[0]
     p.paragraph_format.space_after = Pt(0)
     r = p.add_run(h)
     r.font.name = 'Arial'
-    r.font.size = Pt(9.5)
+    r.font.size = Pt(9)
     r.font.bold = True
     r.font.color.rgb = RGBColor(255, 255, 255)
 
@@ -248,19 +242,18 @@ for i, (sid, sname, srole) in enumerate(members):
     for j, val in enumerate([sid, sname, srole]):
         c = grp_tbl.cell(i+1, j)
         set_cell_shading(c, row_bg)
-        set_cell_margins(c, 80, 80, 120, 120)
+        set_cell_margins(c, 60, 60, 100, 100)
         p = c.paragraphs[0]
         p.paragraph_format.space_after = Pt(0)
         r = p.add_run(val)
         r.font.name = 'Arial'
-        r.font.size = Pt(9)
+        r.font.size = Pt(8.5)
         if j == 0:
             r.font.bold = True
         r.font.color.rgb = COLOR_DARK
 
-doc.add_paragraph().paragraph_format.space_after = Pt(12)
+doc.add_paragraph().paragraph_format.space_after = Pt(8)
 
-# Student Declaration & Assessor Box
 add_callout(
     doc,
     "By submitting this assessment for marking, I affirm that this assessment is my own group's work, that all research sources and references consulted have been properly acknowledged and cited, and that all guidelines regarding academic integrity have been strictly observed.",
@@ -273,280 +266,129 @@ ass_tbl.alignment = WD_TABLE_ALIGNMENT.CENTER
 for j, h in enumerate(["Assessor Name", "Marking Date", "Marks Obtained (out of 40%)"]):
     c = ass_tbl.cell(0, j)
     set_cell_shading(c, HEX_LIGHT_BG)
-    set_cell_margins(c, 80, 80, 100, 100)
+    set_cell_margins(c, 60, 60, 80, 80)
     p = c.paragraphs[0]
     p.paragraph_format.space_after = Pt(0)
     r = p.add_run(h)
     r.font.name = 'Arial'
-    r.font.size = Pt(9)
+    r.font.size = Pt(8.5)
     r.font.bold = True
     r.font.color.rgb = COLOR_DARK
 for j in range(3):
     c = ass_tbl.cell(1, j)
-    set_cell_margins(c, 150, 150, 100, 100)
+    set_cell_margins(c, 120, 120, 80, 80)
     p = c.paragraphs[0]
     p.paragraph_format.space_after = Pt(0)
-    r = p.add_run("[ Assessor Official Use Only ]")
+    r = p.add_run("[ Official Assessor Mark / Feedback ]")
     r.font.name = 'Arial'
-    r.font.size = Pt(8.5)
+    r.font.size = Pt(8)
     r.font.italic = True
     r.font.color.rgb = COLOR_MUTED
 
 doc.add_page_break()
 
-# ==================== TABLE OF CONTENTS / EXECUTIVE SUMMARY ====================
+# ==================== EXECUTIVE SUMMARY ====================
 add_heading_1(doc, "Executive Summary")
 add_body_p(
     doc,
-    "In contemporary higher education institutions, expanding student enrollments and diverse learning pathways create significant challenges for academic advisors and instructors monitoring student progress. This investigation develops an end-to-end intelligent performance analytics pipeline built upon 154,314 longitudinal course-enrollment records across eight academic semesters (2020Spring through 2023Fall). By combining rigorous data anomaly handling, longitudinal student-level feature engineering, regression modeling, multi-class imbalanced classification, and student-level time series forecasting, this study provides actionable, data-driven methodologies to detect at-risk students and forecast academic achievement."
+    "In modern higher education institutions, expanding student enrollments and diverse learning pathways create significant challenges for academic advisors monitoring student progress. This study constructs an end-to-end intelligent performance analysis pipeline based on 154,314 institutional enrollment records across eight academic semesters (2020Spring through 2023Fall). The methodology enforces strict data leakage prevention by establishing a chronological evaluation scheme (Semesters 1–6 Train, Semesters 7–8 Test), fitting all preprocessing pipelines exclusively on the training split, preserving unobserved final exam outcomes without synthetic imputation, and completely excluding numeric_grade to prevent circular target leakage."
 )
 add_body_p(
     doc,
-    "Rigorous data quality exploration revealed 780 corrupted synthetic records ('ERR' letter grades with negative and overflowing numerical marks) and 762 invalid GPA entries. Following systematic data cleaning and leakage-free median imputation, temporal lag variables (prior-semester exam averages, attendance rates, and homework averages) were engineered by establishing a continuous chronological timeline. For final exam score prediction, ensemble architectures (Tuned LightGBM, RMSE = 7.8878, R² = 0.3635) outperformed single decision trees. In multi-class letter grade prediction (A through F), class-weighted cost-sensitive learning addressed severe minority class imbalance (Grade F representing only 0.35% of records), increasing minority recall from 0% to over 34.4% while strictly eliminating data leakage by excluding numeric_grade. Longitudinal forecasting for Student #2 using Exponential Smoothing and ARIMA models demonstrated reliable trajectory tracking (RMSE = 5.75). The resulting analytical framework equips educational administrators with proactive decision-support tools for early academic intervention."
+    "Key empirical findings include: (1) Outlier auditing eliminated 780 corrupted synthetic 'ERR' records (negative and >100 numerical grades) and winsorized 762 invalid GPA entries. (2) For final exam regression, regularized Ridge Regression achieved the lowest test error (RMSE = 8.0510, R² = 0.3885), performing on par with or slightly outperforming complex gradient boosted trees due to predominantly linear-additive signals in primary continuous predictors (homework and prior GPA). (3) For multi-class grade classification (A through F), unweighted models achieved superficial accuracy (34.1%) but failed completely on minority failing students (0.0% recall on Grade F); cost-sensitive balanced weighting elevated Grade F recall to 41.8%–42.5% (Macro F1 = 0.3084), providing genuine early-warning capability. (4) Longitudinal forecasting for Student #2 demonstrated that simple naive persistence (RMSE = 5.3267) outperformed ARIMA(1,0,0) (RMSE = 6.4736) and Exponential Smoothing (RMSE = 5.9621) due to parameter estimation uncertainty on small sample sizes (N=6). The resulting models provide institutional stakeholders with transparent, grounded decision-support tools."
 )
-
-doc.add_paragraph().paragraph_format.space_after = Pt(8)
-
-# Table of Contents Outline
-add_heading_2(doc, "Report Structure & Table of Contents")
-toc_items = [
-    ("Section a", "Problem Explanation and Relevance in Modern Higher Education"),
-    ("Section b", "Project Objectives and the AI-Based Machine Learning Architecture"),
-    ("Section c", "Dataset Exploration, Anomaly Detection, Cleaning, and Feature Engineering"),
-    ("Section d", "Machine Learning Methodology, Formulations, and Technical Rationale"),
-    ("Section e", "Empirical Evaluation, Benchmarking Results, and Comparative Performance"),
-    ("Section f", "Model Interpretation, Influential Features, and Academic Behavioral Insights"),
-    ("Section g", "Practical Educational Implications, Ethical Considerations, and Limitations"),
-    ("Section h", "Overall Synthesis, Key Conclusions, and Future Enhancements"),
-    ("References", "Scholarly References (IEEE Style)")
-]
-for sec, desc in toc_items:
-    p = doc.add_paragraph()
-    p.paragraph_format.space_after = Pt(3)
-    r1 = p.add_run(f"• {sec}: ")
-    r1.font.name = 'Arial'
-    r1.font.bold = True
-    r1.font.color.rgb = COLOR_PRIMARY
-    r2 = p.add_run(desc)
-    r2.font.name = 'Arial'
-    r2.font.color.rgb = COLOR_DARK
-
-doc.add_page_break()
 
 # ==================== SECTION A ====================
-add_heading_1(doc, "Section a: Problem Explanation & Educational Domain Relevance")
-
-add_heading_2(doc, "a.1 The Challenge of Student Attrition and Performance Monitoring")
+add_heading_1(doc, "Section a: Problem Explanation & Relevance in Higher Education")
 add_body_p(
     doc,
-    "Modern universities and polytechnics operate within highly dynamic educational environments characterized by growing student cohorts, modular curricula, and varied student backgrounds. In this context, identifying students at risk of course failure or academic probation has traditionally relied on reactive assessments—often occurring after midterm examinations or final grading cycles when academic intervention comes too late. Educational researchers emphasize that timely, proactive academic advising can dramatically reduce course withdrawal rates, prevent academic dismissal, and improve degree completion metrics [1], [2]."
-)
-add_body_p(
-    doc,
-    "However, academic staff and academic advisors cannot manually monitor thousands of student records across multiple courses, disciplines, and semesters. Academic performance is multifactorial, influenced by study habits, continuous formative assessment (homework assignments), attendance engagement, course credit loads, historical GPA, and temporal momentum. An intelligent machine learning pipeline capable of analyzing structured academic records enables institutions to detect negative trajectory patterns early in a semester, prioritize advising resources toward vulnerable learners, and deliver personalized academic support."
-)
-
-add_heading_2(doc, "a.2 Project Context & Scope")
-add_body_p(
-    doc,
-    "Simulating real-world higher education operations, this project develops an integrated machine learning solution utilizing institutional data from Bahrain Polytechnic's academic environment. The analytical pipeline encompasses regression modeling to estimate continuous final examination scores, multi-class classification to categorize final letter grades (A through F), and longitudinal time-series forecasting to track individual student trajectories across eight semesters. The resulting models provide institutional stakeholders with predictive accuracy and transparent interpretability necessary for ethical educational deployment."
+    "Universities generate extensive longitudinal data across multiple semesters and courses. However, academic advisors cannot manually monitor thousands of student records to detect poor performance trends. Educational literature demonstrates that early academic intervention during the first half of a semester significantly reduces course withdrawal rates and academic dismissal [1], [2]. This project simulates real-world educational operations at Bahrain Polytechnic by developing a machine learning pipeline that examines structured student data to identify achievement patterns and predict final examination scores and letter grades."
 )
 
 # ==================== SECTION B ====================
 add_heading_1(doc, "Section b: Project Objectives & AI Architecture")
-
-add_heading_2(doc, "b.1 Statement of Project Objectives")
 add_body_p(
     doc,
-    "The primary objective of this project is to construct, evaluate, and interpret a modular machine learning pipeline addressing eight core analytical milestones established by the IT7103 specification:"
+    "The pipeline fulfills all core milestones outlined in the IT7103 specification under rigorous methodological safeguards:"
 )
-objectives = [
-    ("1. Data Anomaly Detection & Outlier Engineering: ", "Examine 154,314 raw academic records to detect synthetic errors, erroneous entries, and impossible measurements; establish robust, leakage-free cleaning protocols."),
-    ("2. Temporal Preprocessing & Feature Engineering: ", "Establish a continuous 8-semester chronological sequence, compute student-level temporal lags and rolling statistics, and create domain interaction indicators."),
-    ("3. Correlation & Macro Time Series Analysis: ", "Quantify bivariate relationships between academic drivers and outcomes, evaluating semester-over-semester cohort trends."),
-    ("4. Regression Modeling for Final Exam Prediction: ", "Construct and benchmark single and ensemble regression models to forecast final_exam scores, evaluating performance via RMSE, MAE, R², and MAPE."),
-    ("5. Multi-Class Classification for Grade Prediction: ", "Predict discrete letter grades (A, A-, B+, B, B-, C+, C, C-, D, F) while strictly preventing data leakage by eliminating numeric_grade, employing class balancing to handle extreme minority imbalance."),
-    ("6. Individual Longitudinal Time Series Forecasting: ", "Isolate a student with full multi-semester history (Student #2) to forecast future final exam scores using Exponential Smoothing and ARIMA models under chronological train/test splits."),
-    ("7. Ensemble Synthesis & Comparative Architecture: ", "Critically analyze variance reduction and predictive gains achieved by ensemble models (Bagging, Boosting, Voting) over individual base learners."),
-    ("8. Hyperparameter Optimization & Model Explainability: ", "Systematically optimize gradient boosted trees using GridSearchCV and extract global feature importances to interpret academic drivers.")
-]
-for obj_title, obj_desc in objectives:
-    add_body_p(doc, obj_desc, bold_prefix=obj_title)
-
-add_heading_2(doc, "b.2 End-to-End System Architecture")
-add_body_p(
-    doc,
-    "The pipeline operates across five interconnected modules: (i) Ingestion and Anomaly Cleansing, (ii) Temporal Sequence Assembly & Feature Construction, (iii) Predictive Modeling Engine (incorporating Regression, Cost-Sensitive Multi-Class Classification, and Time Series Forecasting), (iv) Hyperparameter Grid Optimization, and (v) Model Interpretability & Governance. Figure 1 illustrates data distributions following initial cleansing."
-)
+add_body_p(doc, "1. Basic Data Cleaning & Outlier Handling: Detect and remove corrupted records ('ERR' grades), winsorize sensor errors in prior_gpa, cap extreme study_hours, and preserve missing final_exam values without imputation.")
+add_body_p(doc, "2. Advanced Preprocessing & Feature Engineering: Construct continuous student-semester sequences and generate strictly past-only lag features and 2-semester rolling statistics.")
+add_body_p(doc, "3. Correlation & Cohort Analysis: Evaluate bivariate relationships between features and targets, analyzing university-wide stability across 8 semesters.")
+add_body_p(doc, "4. Regression Modeling for Final Exam Prediction: Train Ridge, Decision Tree, Random Forest, LightGBM, XGBoost, and Voting Ensembles evaluated on chronological test semesters using observed targets only.")
+add_body_p(doc, "5. Multi-Class Classification for Grade Prediction: Predict discrete grades (A to F) with strict data leakage avoidance and side-by-side unweighted vs. balanced model comparisons.")
+add_body_p(doc, "6. Student Time Series Forecasting: Longitudinal tracking of Student #2 over 8 semesters, benchmarking Exponential Smoothing, ARIMA(1,0,0), and Naive persistence under low-N constraints.")
+add_body_p(doc, "7. Hyperparameter Optimization: Dual tuning of regression (via TimeSeriesSplit) and classification (via Stratified K-Fold).")
+add_body_p(doc, "8. Explainability: Transparent comparison of Split Importance versus Gain Importance.")
 
 # ==================== SECTION C ====================
 add_heading_1(doc, "Section c: Dataset Description, Data Quality Assessment & Feature Engineering")
-
-add_heading_2(doc, "c.1 Dataset Attributes & Variable Typology")
 add_body_p(
     doc,
-    "The institutional dataset comprises 154,314 student-course enrollment records across 20 attributes, capturing student demographics, course parameters, study behaviors, and outcome metrics:"
-)
-add_body_p(doc, "• Categorical Variables: semester (8 levels), course_code (CS101–CS236), course_name, subject_area (9 disciplines), instructor (15 faculty members), grade_letter (target), gender (M, F, Other), year_of_study (Freshman, Sophomore, Junior, Senior).")
-add_body_p(doc, "• Numerical Variables: credits (3, 4), numeric_grade (0–100), prior_gpa (0.0–4.0), study_hours (weekly), attendance_rate (0–100%), age (18–65), homework_avg (0–100), final_exam (0–100).")
-add_body_p(doc, "• Binary Variables: scholarship (0/1), extracurricular (count 0–10), internship (0/1).")
-
-add_heading_2(doc, "c.2 Anomaly Detection & Data Cleansing Protocols")
-add_body_p(
-    doc,
-    "Thorough exploratory diagnostics uncovered three distinct classes of data anomalies intentionally embedded within the raw records to test preprocessing robustness:"
+    f"The dataset contains {results['dataset_stats']['raw_rows']:,} student-course enrollment records across 20 attributes. Diagnostics revealed three critical anomaly patterns:"
 )
 add_body_p(
     doc,
-    "1. Corrupted Synthetic Records (ERR): Exactly 780 records contained grade_letter == 'ERR'. Cross-tabulation revealed that every single 'ERR' entry corresponded perfectly to impossible numeric_grade values ranging from -10.0 to -0.01 (287 rows) and 100.01 to 110.0 (493 rows). Because these records represent corrupted noise where ground truth cannot be verified, they were safely pruned, reducing the working sample to 153,534 valid records."
+    f"• Corrupted 'ERR' Records: Exactly {results['dataset_stats']['dropped_err_count']} records had grade_letter == 'ERR' and impossible numerical grades (-10.0 to -0.01 and 100.01 to 110.0). These represent corrupted synthetic noise and were pruned, leaving {results['dataset_stats']['clean_rows']:,} records."
 )
 add_body_p(
     doc,
-    "2. Out-of-Bounds Prior GPA: The valid institutional GPA scale is strictly [0.0, 4.0]. Diagnostics identified 762 records containing sentinel error values of -1.0 (371 cases) and 5.0 (391 cases). These impossible sensor values were winsorized to the legitimate boundary thresholds [0.0, 4.0]."
+    f"• Invalid Prior GPA: {results['dataset_stats']['cleaned_gpa_count']} records had sentinel values outside the legitimate [0.0, 4.0] scale (-1.0 and 5.0). These were winsorized to [0.0, 4.0]."
 )
 add_body_p(
     doc,
-    "3. Extreme Weekly Study Hours: While legitimate academic study hours rarely exceed 50 hours per week for full-time students, 1,419 records showed extreme values between 60.0 and 119.9 hours. To preserve model robustness against extreme leverage points, study_hours was capped at 60.0 hours/week."
+    f"• Extreme Weekly Study Hours: {results['dataset_stats']['extreme_study_count']} records showed weekly study hours between 60.0 and 119.9 hours. These were capped at 60.0 hours/week."
 )
 add_body_p(
     doc,
-    "4. Leakage-Free Missing Value Imputation: Approximately 7% of records contained null values across study_hours (10,963), attendance_rate (10,815), homework_avg (10,687), and final_exam (10,752). Rather than using global means that distort disciplinary standards, missing entries were imputed using course-specific medians (e.g., median homework in CS102 vs. CS212), preserving localized academic context."
+    f"• Preserving Observed Targets (No Target Imputation): Out of {results['dataset_stats']['clean_rows']:,} cleaned records, exactly 142,825 records have observed final_exam values, while 10,709 are missing (~7.0%). In strict compliance with sound statistical methodology, missing targets were NEVER imputed. Regression models were trained and evaluated exclusively on observed targets."
 )
 
-add_figure(doc, "figures/fig1_data_cleaning.png", "Figure 1: Cleaned Grade Letter Distribution and Study Hours vs. Numeric Grade (Sampled n=5,000)")
-
-add_heading_2(doc, "c.3 Temporal Preprocessing & Feature Engineering")
+add_heading_2(doc, "c.1 Continuous Temporal Sequences & Past-Only Features")
 add_body_p(
     doc,
-    "To capture academic momentum and temporal persistence, records were mapped to a chronological integer timeline: 2020Spring (1), 2020Fall (2), 2021Spring (3), 2021Fall (4), 2022Spring (5), 2022Fall (6), 2023Spring (7), and 2023Fall (8). Sorting records by student_id and sem_num enabled the construction of longitudinal features:"
+    "To support temporal modeling, records were organized into a complete student-by-semester grid across all eight semesters (2020Spring through 2023Fall). Student semester averages were computed exclusively from observed values. Strictly past-only lag features (final_exam_prev_semester, homework_avg_prev_semester, attendance_prev_semester) and 2-semester rolling means were extracted over past semesters {t-2, t-1}, strictly excluding current semester t to prevent temporal leakage."
 )
-add_body_p(doc, "• final_exam_prev_semester: The student's average final exam score in semester t-1.")
-add_body_p(doc, "• homework_avg_prev_semester: The student's average homework performance in semester t-1.")
-add_body_p(doc, "• attendance_prev_semester: The student's attendance rate in semester t-1.")
-add_body_p(doc, "• study_hours_per_credit: Study hours normalized by course credit weight (study_hours / credits).")
-add_body_p(doc, "• attendance_hw_composite: A weighted engagement indicator combining attendance engagement and formative assessment (0.4 * attendance_rate + 0.6 * homework_avg).")
-
-add_figure(doc, "figures/fig2_correlation_matrix.png", "Figure 2: Pearson Correlation Matrix of Engineered Academic Features and Outcomes")
-
-add_heading_2(doc, "c.4 Correlation & Macro Cohort Analysis")
-add_body_p(
-    doc,
-    "Correlation analysis (Figure 2) reveals that homework_avg exhibits the strongest linear correlation with final_exam (r = 0.58), followed by prior semester exam performance (r = 0.44) and attendance rate (r = 0.38). In contrast, extracurricular activities and age display negligible linear relationships with examination outcomes (|r| < 0.05). Macro-level cohort trends across semesters (Figure 3) demonstrate seasonal stability across the university population, maintaining mean final exam averages between 78.4 and 79.8 points across the 2020–2023 observation window."
-)
-
-add_figure(doc, "figures/fig3_cohort_trend.png", "Figure 3: Cohort Academic Indicators (Final Exam, Homework Avg, Attendance) Across 8 Semesters")
+add_figure(doc, "figures/fig2_correlation_matrix.png", "Figure 1: Pearson Correlation Matrix of Engineered Academic Features and Outcomes")
 
 # ==================== SECTION D ====================
 add_heading_1(doc, "Section d: Machine Learning Methodology & Technical Rationale")
-
-add_heading_2(doc, "d.1 Strict Prevention of Data Leakage")
 add_callout(
     doc,
-    "CRITICAL METHODOLOGICAL SAFEGUARD: In educational predictive analytics, numeric_grade is an algebraic combination of homework_avg and final_exam (e.g., Numeric Grade = 0.4 * Homework + 0.6 * Final Exam). Furthermore, letter grades are mapped directly from numeric_grade via administrative grading bands. Including numeric_grade in feature matrices to predict grade_letter or final_exam would introduce fatal circular data leakage. In strict compliance with the project guidelines, numeric_grade was completely excluded from all feature sets.",
-    "Data Leakage Avoidance Declaration"
+    "STRICT DATA LEAKAGE PREVENTION: The dataset was partitioned chronologically BEFORE fitting any preprocessing transformer. Training was restricted to historical Semesters 1–6 (115,109 rows); Testing was held out on future Semesters 7 & 8 (38,425 rows). All imputers, scalers, and one-hot encoders were fitted strictly on the Training set. Furthermore, numeric_grade was completely removed from feature matrices.",
+    "Data Leakage Safeguard Declaration"
 )
 
-add_heading_2(doc, "d.2 Regression Modeling Formulations")
+add_heading_2(doc, "d.1 Regression Formulation & Ablation Study")
 add_body_p(
     doc,
-    "Predicting continuous final_exam scores was formulated as a supervised regression task y in [0, 100]. Five diverse algorithmic paradigms were implemented:"
-)
-add_body_p(
-    doc,
-    "1. Regularized Ridge Regression: Adds an L2 penalty to ordinary least squares to prevent multicollinearity among correlated academic metrics:\n"
-    "   min_w ||Xw - y||_2^2 + alpha * ||w||_2^2"
-)
-add_body_p(
-    doc,
-    "2. CART Decision Tree Regressor: Recursively partitions the feature space into hyper-rectangles by minimizing mean squared error split impurity:\n"
-    "   MSE_split = sum_{i in L} (y_i - y_bar_L)^2 + sum_{i in R} (y_i - y_bar_R)^2"
-)
-add_body_p(
-    doc,
-    "3. Random Forest Regressor: An ensemble bagging technique constructing B = 100 de-correlated trees trained on bootstrap samples with random feature subsampling, reducing predictive variance:\n"
-    "   y_hat_RF = (1 / B) * sum_{b=1}^B T_b(x)"
-)
-add_body_p(
-    doc,
-    "4. Gradient Boosted Trees (LightGBM & XGBoost): Sequentially construct additive regression trees fitting negative gradients (pseudo-residuals) of the loss function, incorporating second-order Taylor approximations and histogram-based binning for optimal computational efficiency:\n"
-    "   L_t = sum_{i=1}^N [g_i f_t(x_i) + 0.5 * h_i f_t^2(x_i)] + Omega(f_t)"
-)
-add_body_p(
-    doc,
-    "5. Weighted Voting Regressor Ensemble: Combines predictions from Random Forest, LightGBM, and XGBoost with weights [1, 2, 2], leveraging complementary strengths of bagging and boosting."
+    f"Predicting continuous final_exam scores was evaluated on {results['dataset_stats']['test_reg_observed_y']:,} observed test records. To test whether engineered temporal lag features provide empirical predictive lift, an ablation experiment was conducted comparing raw baseline features against full engineered features (Table 1)."
 )
 
-add_heading_2(doc, "d.3 Multi-Class Classification & Severe Imbalance Mitigation")
-add_body_p(
-    doc,
-    "Letter grade prediction involves 10 mutually exclusive classes: {A, A-, B+, B, B-, C+, C, C-, D, F}. A major operational challenge is severe class imbalance: failing grades ('F') account for only 544 out of 153,534 records (0.354%), while common grades ('B', 'B-', 'C+') each comprise over 13%–18% of records. Standard unweighted classifiers maximize overall accuracy by completely ignoring the minority 'F' class, rendering the model useless for early failure intervention."
-)
-add_body_p(
-    doc,
-    "To counter this, cost-sensitive learning was enforced across all classification models by applying balanced class weighting:\n"
-    "   w_j = N / (K * n_j)\n"
-    "where N is total samples, K is the number of classes (10), and n_j is the frequency of class j. Consequently, errors on the minority 'F' class receive ~28x higher penalty during loss computation, forcing the optimization algorithm to achieve high sensitivity on struggling students."
-)
-
-add_heading_2(doc, "d.4 Longitudinal Time Series Modeling for Individual Students")
-add_body_p(
-    doc,
-    "To evaluate individual student trajectory forecasting, Student #2 was selected due to an uninterrupted 8-semester sequence from 2020Spring to 2023Fall. Semester-aggregated final exam scores y_t for t = 1, ..., 8 were modeled. In accordance with time series principles, the sequence was split chronologically: training on semesters 1 to 6 and testing on semesters 7 and 8."
-)
-add_body_p(
-    doc,
-    "• Simple Exponential Smoothing (SES): Models level updates via smoothing coefficient alpha in (0, 1):\n"
-    "   l_t = alpha * y_t + (1 - alpha) * l_{t-1},   y_hat_{t+h|t} = l_t"
-)
-add_body_p(
-    doc,
-    "• AutoRegressive Integrated Moving Average (ARIMA(1,0,0)): Captures mean-reverting autoregressive momentum:\n"
-    "   (1 - phi_1 * B) (y_t - mu) = epsilon_t,   epsilon_t ~ N(0, sigma^2)"
-)
-add_body_p(
-    doc,
-    "• Persistence Baseline (Naive Lag-1): Sets future forecasts equal to the most recent observed semester value (y_hat_{T+h} = y_T), providing an empirical benchmark for time series utility."
-)
-
-# ==================== SECTION E ====================
-add_heading_1(doc, "Section e: Model Evaluation, Results & Comparative Benchmarks")
-
-add_heading_2(doc, "e.1 Regression Model Evaluation (Final Exam Prediction)")
-add_body_p(
-    doc,
-    "Table 1 and Figure 4 summarize performance across the test set (30,707 unseen records). Regularized Ridge, LightGBM, and the Voting Ensemble demonstrated near-identical superior performance, achieving test RMSEs of 7.8850 to 7.8965 and MAE values of 6.32 to 6.33 score points (MAPE ~ 8.0%)."
-)
-
-# Regression Table
-reg_tbl = doc.add_table(rows=7, cols=5)
-reg_tbl.alignment = WD_TABLE_ALIGNMENT.CENTER
-headers_reg = ["Regression Model Architecture", "RMSE (Points)", "MAE (Points)", "R² Score", "MAPE (%)"]
-for j, h in enumerate(headers_reg):
-    c = reg_tbl.cell(0, j)
+# Ablation Table
+abl_tbl = doc.add_table(rows=3, cols=4)
+abl_tbl.alignment = WD_TABLE_ALIGNMENT.CENTER
+for j, h in enumerate(["Model Architecture", "Raw Features RMSE", "Engineered Features RMSE", "Delta (Lift)"]):
+    c = abl_tbl.cell(0, j)
     set_cell_shading(c, HEX_PRIMARY)
-    set_cell_margins(c, 80, 80, 100, 100)
+    set_cell_margins(c, 60, 60, 80, 80)
     p = c.paragraphs[0]
     p.paragraph_format.space_after = Pt(0)
     r = p.add_run(h)
     r.font.name = 'Arial'
-    r.font.size = Pt(9)
+    r.font.size = Pt(8.5)
     r.font.bold = True
     r.font.color.rgb = RGBColor(255, 255, 255)
 
-reg_rows = [
-    ("Ridge Regression (alpha=1.0)", f"{results['regression_results']['Ridge Regression']['RMSE']:.4f}", f"{results['regression_results']['Ridge Regression']['MAE']:.4f}", f"{results['regression_results']['Ridge Regression']['R2']:.4f}", f"{results['regression_results']['Ridge Regression']['MAPE']:.2f}%"),
-    ("Decision Tree Regressor (depth=8)", f"{results['regression_results']['Decision Tree']['RMSE']:.4f}", f"{results['regression_results']['Decision Tree']['MAE']:.4f}", f"{results['regression_results']['Decision Tree']['R2']:.4f}", f"{results['regression_results']['Decision Tree']['MAPE']:.2f}%"),
-    ("Random Forest Regressor (B=100)", f"{results['regression_results']['Random Forest']['RMSE']:.4f}", f"{results['regression_results']['Random Forest']['MAE']:.4f}", f"{results['regression_results']['Random Forest']['R2']:.4f}", f"{results['regression_results']['Random Forest']['MAPE']:.2f}%"),
-    ("LightGBM Regressor (Tuned)", f"{results['tuning_comparison']['Tuned LightGBM']['RMSE']:.4f}", f"{results['tuning_comparison']['Tuned LightGBM']['MAE']:.4f}", f"{results['tuning_comparison']['Tuned LightGBM']['R2']:.4f}", f"{results['tuning_comparison']['Tuned LightGBM']['MAPE']:.2f}%"),
-    ("XGBoost Regressor (depth=6)", f"{results['regression_results']['XGBoost']['RMSE']:.4f}", f"{results['regression_results']['XGBoost']['MAE']:.4f}", f"{results['regression_results']['XGBoost']['R2']:.4f}", f"{results['regression_results']['XGBoost']['MAPE']:.2f}%"),
-    ("Voting Ensemble (RF + LGB + XGB)", f"{results['regression_results']['Voting Ensemble']['RMSE']:.4f}", f"{results['regression_results']['Voting Ensemble']['MAE']:.4f}", f"{results['regression_results']['Voting Ensemble']['R2']:.4f}", f"{results['regression_results']['Voting Ensemble']['MAPE']:.2f}%")
+abl_rows = [
+    ("Ridge Regression", f"{results['ablation_study']['Ridge']['Raw_RMSE']:.4f}", f"{results['ablation_study']['Ridge']['Engineered_RMSE']:.4f}", f"{results['ablation_study']['Ridge']['Delta']:+.4f}"),
+    ("LightGBM Regressor", f"{results['ablation_study']['LightGBM']['Raw_RMSE']:.4f}", f"{results['ablation_study']['LightGBM']['Engineered_RMSE']:.4f}", f"{results['ablation_study']['LightGBM']['Delta']:+.4f}")
 ]
-for i, row in enumerate(reg_rows):
+for i, row in enumerate(abl_rows):
     row_bg = HEX_ALT_ROW if i % 2 == 1 else "FFFFFF"
     for j, val in enumerate(row):
-        c = reg_tbl.cell(i+1, j)
+        c = abl_tbl.cell(i+1, j)
         set_cell_shading(c, row_bg)
-        set_cell_margins(c, 70, 70, 100, 100)
+        set_cell_margins(c, 50, 50, 80, 80)
         p = c.paragraphs[0]
         p.paragraph_format.space_after = Pt(0)
         r = p.add_run(val)
@@ -557,29 +399,27 @@ for i, row in enumerate(reg_rows):
         r.font.color.rgb = COLOR_DARK
 
 doc.add_paragraph().paragraph_format.space_after = Pt(6)
-add_figure(doc, "figures/fig4_regression_comparison.png", "Figure 4: Quantitative Performance Metrics across Regression Architectures")
-add_figure(doc, "figures/fig5_residuals_diagnostic.png", "Figure 5: Residual Diagnostics and Error Distribution for Tuned LightGBM Regressor")
-
-add_heading_2(doc, "e.2 Residual Analysis & Error Diagnostics")
 add_body_p(
     doc,
-    "Residual diagnostics (Figure 5) confirm that the error terms e_i = y_i - y_hat_i are symmetrically distributed around zero with a near-Gaussian distribution (mean error = -0.012 points, standard deviation = 7.88). The absence of pronounced heteroskedasticity or non-linear curvature across the predicted range confirms that the linear and tree-based representations adequately model the conditional expectation."
+    "The ablation study reveals that continuous intra-semester homework performance and prior GPA carry the overwhelming majority of predictive signal; adding lagged semester features provides modest incremental gain in gradient boosted trees (+0.0012 RMSE reduction) while maintaining parity in linear models."
 )
 
-add_heading_2(doc, "e.3 Classification Benchmarking (Grade Letter Prediction)")
+# ==================== SECTION E ====================
+add_heading_1(doc, "Section e: Model Evaluation, Results & Comparative Benchmarks")
+
+add_heading_2(doc, "e.1 Regression Model Benchmarking (Final Exam Prediction)")
 add_body_p(
     doc,
-    "Predicting 10 discrete grade categories without access to numeric_grade represents a challenging statistical learning problem. Because adjacent grades (e.g., 'B' vs. 'B-' or 'B+') differ by merely 3 points on an underlying 100-point scale, models must distinguish fine boundaries solely from engagement and prior metrics. Table 2 and Figure 6 document classification metrics across models."
+    "Table 2 reports performance metrics evaluated on the chronological holdout test set (Semesters 7 & 8)."
 )
 
-# Classification Table
-clf_tbl = doc.add_table(rows=6, cols=6)
-clf_tbl.alignment = WD_TABLE_ALIGNMENT.CENTER
-headers_clf = ["Classification Model", "Overall Acc", "Macro Prec", "Macro Recall", "F1-Macro", "F1-Weighted"]
-for j, h in enumerate(headers_clf):
-    c = clf_tbl.cell(0, j)
+# Regression Table
+reg_tbl = doc.add_table(rows=8, cols=5)
+reg_tbl.alignment = WD_TABLE_ALIGNMENT.CENTER
+for j, h in enumerate(["Regression Architecture", "RMSE (Points)", "MAE (Points)", "R² Score", "MAPE (%)"]):
+    c = reg_tbl.cell(0, j)
     set_cell_shading(c, HEX_PRIMARY)
-    set_cell_margins(c, 80, 80, 80, 80)
+    set_cell_margins(c, 60, 60, 80, 80)
     p = c.paragraphs[0]
     p.paragraph_format.space_after = Pt(0)
     r = p.add_run(h)
@@ -588,19 +428,77 @@ for j, h in enumerate(headers_clf):
     r.font.bold = True
     r.font.color.rgb = RGBColor(255, 255, 255)
 
+reg_rows = [
+    ("Ridge Regression (alpha=1.0)", f"{results['regression_results']['Ridge Regression']['RMSE']:.4f}", f"{results['regression_results']['Ridge Regression']['MAE']:.4f}", f"{results['regression_results']['Ridge Regression']['R2']:.4f}", f"{results['regression_results']['Ridge Regression']['MAPE']:.2f}%"),
+    ("Decision Tree Regressor (depth=8)", f"{results['regression_results']['Decision Tree']['RMSE']:.4f}", f"{results['regression_results']['Decision Tree']['MAE']:.4f}", f"{results['regression_results']['Decision Tree']['R2']:.4f}", f"{results['regression_results']['Decision Tree']['MAPE']:.2f}%"),
+    ("Random Forest Regressor (B=100)", f"{results['regression_results']['Random Forest']['RMSE']:.4f}", f"{results['regression_results']['Random Forest']['MAE']:.4f}", f"{results['regression_results']['Random Forest']['R2']:.4f}", f"{results['regression_results']['Random Forest']['MAPE']:.2f}%"),
+    ("LightGBM Regressor (Baseline)", f"{results['regression_results']['LightGBM']['RMSE']:.4f}", f"{results['regression_results']['LightGBM']['MAE']:.4f}", f"{results['regression_results']['LightGBM']['R2']:.4f}", f"{results['regression_results']['LightGBM']['MAPE']:.2f}%"),
+    ("LightGBM Regressor (Tuned)", f"{results['tuning_regression']['Tuned_LightGBM']['RMSE']:.4f}", f"{results['tuning_regression']['Tuned_LightGBM']['MAE']:.4f}", f"{results['tuning_regression']['Tuned_LightGBM']['R2']:.4f}", f"{results['tuning_regression']['Tuned_LightGBM']['MAPE']:.2f}%"),
+    ("XGBoost Regressor (depth=6)", f"{results['regression_results']['XGBoost']['RMSE']:.4f}", f"{results['regression_results']['XGBoost']['MAE']:.4f}", f"{results['regression_results']['XGBoost']['R2']:.4f}", f"{results['regression_results']['XGBoost']['MAPE']:.2f}%"),
+    ("Voting Ensemble (RF + LGB + XGB)", f"{results['regression_results']['Voting Ensemble']['RMSE']:.4f}", f"{results['regression_results']['Voting Ensemble']['MAE']:.4f}", f"{results['regression_results']['Voting Ensemble']['R2']:.4f}", f"{results['regression_results']['Voting Ensemble']['MAPE']:.2f}%")
+]
+for i, row in enumerate(reg_rows):
+    row_bg = HEX_ALT_ROW if i % 2 == 1 else "FFFFFF"
+    for j, val in enumerate(row):
+        c = reg_tbl.cell(i+1, j)
+        set_cell_shading(c, row_bg)
+        set_cell_margins(c, 50, 50, 80, 80)
+        p = c.paragraphs[0]
+        p.paragraph_format.space_after = Pt(0)
+        r = p.add_run(val)
+        r.font.name = 'Arial'
+        r.font.size = Pt(8.5)
+        if j == 0:
+            r.font.bold = True
+        r.font.color.rgb = COLOR_DARK
+
+doc.add_paragraph().paragraph_format.space_after = Pt(6)
+add_figure(doc, "figures/fig4_regression_comparison.png", "Figure 2: Performance Comparison across Regression Architectures (Chronological Holdout)")
+add_figure(doc, "figures/fig5_residuals_diagnostic.png", "Figure 3: Residual Diagnostic Scatter and Normality Histogram for Winning Model (Ridge)")
+
+add_body_p(
+    doc,
+    "Objective Regression Interpretation: Contrary to naive expectations that complex non-linear ensembles always dominate, regularized Ridge Regression achieved the lowest test RMSE (8.0510) and highest R² (0.3885), closely matched by Tuned LightGBM (8.0528). This occurs because the relationship between summative examination performance and the primary continuous predictors (formative homework average and prior cumulative GPA) is predominantly linear-additive. Decision trees partition continuous slopes into piecewise constant bins, introducing slight variance without capturing non-linear interactions. Ridge regression provides optimal variance regularization without structural overfitting."
+)
+
+add_heading_2(doc, "e.2 Multi-Class Classification & Rigorous Minority 'F' Evaluation")
+add_body_p(
+    doc,
+    "In the chronological test split (38,425 records), failing grades ('F') represent an extreme minority class of only 146 instances (0.380%). Table 3 provides an empirical side-by-side comparison of unweighted models versus cost-sensitive balanced models."
+)
+
+# Classification Table
+clf_tbl = doc.add_table(rows=9, cols=7)
+clf_tbl.alignment = WD_TABLE_ALIGNMENT.CENTER
+headers_clf = ["Model Architecture", "Overall Acc", "Macro Prec", "Macro Rec", "Macro F1", "Class F Rec", "Class F Prec"]
+for j, h in enumerate(headers_clf):
+    c = clf_tbl.cell(0, j)
+    set_cell_shading(c, HEX_PRIMARY)
+    set_cell_margins(c, 60, 60, 60, 60)
+    p = c.paragraphs[0]
+    p.paragraph_format.space_after = Pt(0)
+    r = p.add_run(h)
+    r.font.name = 'Arial'
+    r.font.size = Pt(8)
+    r.font.bold = True
+    r.font.color.rgb = RGBColor(255, 255, 255)
+
 clf_rows = [
-    ("Multinomial Logistic Regression (Balanced)", f"{results['classification_results']['Multinomial LogReg']['Accuracy']:.4f}", f"{results['classification_results']['Multinomial LogReg']['Precision_Macro']:.4f}", f"{results['classification_results']['Multinomial LogReg']['Recall_Macro']:.4f}", f"{results['classification_results']['Multinomial LogReg']['F1_Macro']:.4f}", f"{results['classification_results']['Multinomial LogReg']['F1_Weighted']:.4f}"),
-    ("Decision Tree Classifier (Balanced)", f"{results['classification_results']['Decision Tree']['Accuracy']:.4f}", f"{results['classification_results']['Decision Tree']['Precision_Macro']:.4f}", f"{results['classification_results']['Decision Tree']['Recall_Macro']:.4f}", f"{results['classification_results']['Decision Tree']['F1_Macro']:.4f}", f"{results['classification_results']['Decision Tree']['F1_Weighted']:.4f}"),
-    ("Random Forest Classifier (Balanced)", f"{results['classification_results']['Random Forest (Balanced)']['Accuracy']:.4f}", f"{results['classification_results']['Random Forest (Balanced)']['Precision_Macro']:.4f}", f"{results['classification_results']['Random Forest (Balanced)']['Recall_Macro']:.4f}", f"{results['classification_results']['Random Forest (Balanced)']['F1_Macro']:.4f}", f"{results['classification_results']['Random Forest (Balanced)']['F1_Weighted']:.4f}"),
-    ("LightGBM Classifier (Balanced)", f"{results['classification_results']['LightGBM Classifier']['Accuracy']:.4f}", f"{results['classification_results']['LightGBM Classifier']['Precision_Macro']:.4f}", f"{results['classification_results']['LightGBM Classifier']['Recall_Macro']:.4f}", f"{results['classification_results']['LightGBM Classifier']['F1_Macro']:.4f}", f"{results['classification_results']['LightGBM Classifier']['F1_Weighted']:.4f}"),
-    ("XGBoost Multi-Class Classifier", f"{results['classification_results']['XGBoost Classifier']['Accuracy']:.4f}", f"{results['classification_results']['XGBoost Classifier']['Precision_Macro']:.4f}", f"{results['classification_results']['XGBoost Classifier']['Recall_Macro']:.4f}", f"{results['classification_results']['XGBoost Classifier']['F1_Macro']:.4f}", f"{results['classification_results']['XGBoost Classifier']['F1_Weighted']:.4f}")
+    ("Multinomial LogReg (Unweighted)", f"{results['classification_results']['Multinomial LogReg (Unweighted)']['Accuracy']:.4f}", f"{results['classification_results']['Multinomial LogReg (Unweighted)']['Precision_Macro']:.4f}", f"{results['classification_results']['Multinomial LogReg (Unweighted)']['Recall_Macro']:.4f}", f"{results['classification_results']['Multinomial LogReg (Unweighted)']['F1_Macro']:.4f}", f"{results['classification_results']['Multinomial LogReg (Unweighted)']['Class_F_Recall']*100:.1f}%", f"{results['classification_results']['Multinomial LogReg (Unweighted)']['Class_F_Precision']*100:.1f}%"),
+    ("Multinomial LogReg (Balanced)", f"{results['classification_results']['Multinomial LogReg (Balanced)']['Accuracy']:.4f}", f"{results['classification_results']['Multinomial LogReg (Balanced)']['Precision_Macro']:.4f}", f"{results['classification_results']['Multinomial LogReg (Balanced)']['Recall_Macro']:.4f}", f"{results['classification_results']['Multinomial LogReg (Balanced)']['F1_Macro']:.4f}", f"{results['classification_results']['Multinomial LogReg (Balanced)']['Class_F_Recall']*100:.1f}%", f"{results['classification_results']['Multinomial LogReg (Balanced)']['Class_F_Precision']*100:.1f}%"),
+    ("Decision Tree (Unweighted)", f"{results['classification_results']['Decision Tree (Unweighted)']['Accuracy']:.4f}", f"{results['classification_results']['Decision Tree (Unweighted)']['Precision_Macro']:.4f}", f"{results['classification_results']['Decision Tree (Unweighted)']['Recall_Macro']:.4f}", f"{results['classification_results']['Decision Tree (Unweighted)']['F1_Macro']:.4f}", f"{results['classification_results']['Decision Tree (Unweighted)']['Class_F_Recall']*100:.1f}%", f"{results['classification_results']['Decision Tree (Unweighted)']['Class_F_Precision']*100:.1f}%"),
+    ("Decision Tree (Balanced)", f"{results['classification_results']['Decision Tree (Balanced)']['Accuracy']:.4f}", f"{results['classification_results']['Decision Tree (Balanced)']['Precision_Macro']:.4f}", f"{results['classification_results']['Decision Tree (Balanced)']['Recall_Macro']:.4f}", f"{results['classification_results']['Decision Tree (Balanced)']['F1_Macro']:.4f}", f"{results['classification_results']['Decision Tree (Balanced)']['Class_F_Recall']*100:.1f}%", f"{results['classification_results']['Decision Tree (Balanced)']['Class_F_Precision']*100:.1f}%"),
+    ("Random Forest (Unweighted)", f"{results['classification_results']['Random Forest (Unweighted)']['Accuracy']:.4f}", f"{results['classification_results']['Random Forest (Unweighted)']['Precision_Macro']:.4f}", f"{results['classification_results']['Random Forest (Unweighted)']['Recall_Macro']:.4f}", f"{results['classification_results']['Random Forest (Unweighted)']['F1_Macro']:.4f}", f"{results['classification_results']['Random Forest (Unweighted)']['Class_F_Recall']*100:.1f}%", f"{results['classification_results']['Random Forest (Unweighted)']['Class_F_Precision']*100:.1f}%"),
+    ("Random Forest (Balanced)", f"{results['classification_results']['Random Forest (Balanced)']['Accuracy']:.4f}", f"{results['classification_results']['Random Forest (Balanced)']['Precision_Macro']:.4f}", f"{results['classification_results']['Random Forest (Balanced)']['Recall_Macro']:.4f}", f"{results['classification_results']['Random Forest (Balanced)']['F1_Macro']:.4f}", f"{results['classification_results']['Random Forest (Balanced)']['Class_F_Recall']*100:.1f}%", f"{results['classification_results']['Random Forest (Balanced)']['Class_F_Precision']*100:.1f}%"),
+    ("LightGBM (Unweighted)", f"{results['classification_results']['LightGBM (Unweighted)']['Accuracy']:.4f}", f"{results['classification_results']['LightGBM (Unweighted)']['Precision_Macro']:.4f}", f"{results['classification_results']['LightGBM (Unweighted)']['Recall_Macro']:.4f}", f"{results['classification_results']['LightGBM (Unweighted)']['F1_Macro']:.4f}", f"{results['classification_results']['LightGBM (Unweighted)']['Class_F_Recall']*100:.1f}%", f"{results['classification_results']['LightGBM (Unweighted)']['Class_F_Precision']*100:.1f}%"),
+    ("LightGBM (Balanced)", f"{results['classification_results']['LightGBM (Balanced)']['Accuracy']:.4f}", f"{results['classification_results']['LightGBM (Balanced)']['Precision_Macro']:.4f}", f"{results['classification_results']['LightGBM (Balanced)']['Recall_Macro']:.4f}", f"{results['classification_results']['LightGBM (Balanced)']['F1_Macro']:.4f}", f"{results['classification_results']['LightGBM (Balanced)']['Class_F_Recall']*100:.1f}%", f"{results['classification_results']['LightGBM (Balanced)']['Class_F_Precision']*100:.1f}%")
 ]
 for i, row in enumerate(clf_rows):
     row_bg = HEX_ALT_ROW if i % 2 == 1 else "FFFFFF"
     for j, val in enumerate(row):
         c = clf_tbl.cell(i+1, j)
         set_cell_shading(c, row_bg)
-        set_cell_margins(c, 70, 70, 80, 80)
+        set_cell_margins(c, 50, 50, 60, 60)
         p = c.paragraphs[0]
         p.paragraph_format.space_after = Pt(0)
         r = p.add_run(val)
@@ -611,47 +509,46 @@ for i, row in enumerate(clf_rows):
         r.font.color.rgb = COLOR_DARK
 
 doc.add_paragraph().paragraph_format.space_after = Pt(6)
-add_figure(doc, "figures/fig6_classification_comparison.png", "Figure 6: Multi-Class Classification Performance Benchmark Across 10 Letter Grades")
-add_figure(doc, "figures/fig7_confusion_matrix.png", "Figure 7: Normalized Confusion Matrix for Balanced Random Forest Classifier")
+add_figure(doc, "figures/fig6_classification_comparison.png", "Figure 4: Unweighted vs. Balanced Classification: Accuracy, Macro F1, and Class 'F' Recall")
+add_figure(doc, "figures/fig7_confusion_matrix.png", "Figure 5: Normalized Confusion Matrix for Balanced Random Forest (Strict Grade Order: A to F)")
 
 add_body_p(
     doc,
-    "Crucially, while an unweighted baseline model achieves 34.3% accuracy by predicting majority classes, its F1-Macro drops significantly to 0.2764 because it fails on minority grades. In contrast, LightGBM Classifier (Balanced) and Random Forest (Balanced) maximize F1-Macro (0.3076 and 0.3054) and achieve balanced recall (~34.4%) across all classes, including Grade F. The normalized confusion matrix (Figure 7) reveals that misclassifications fall almost entirely into adjacent grade bands (e.g., predicting 'B' when the true grade is 'B+' or 'B-'), which represents an acceptable and expected margin of error in real-world educational grading."
+    "Critical Imbalance Analysis: Unweighted Random Forest maximizes raw accuracy (34.12%) by predicting common grades ('B', 'B-', 'C+'), resulting in exactly 0.0% recall on Grade F—missing every failing student. Cost-sensitive class balancing trades a small degree of overall accuracy (29.60%) to dramatically lift Grade F recall to 41.78% (Random Forest) and 42.47% (LightGBM), with Macro F1 increasing from 0.2413 to 0.3084. Macro recall across all 10 classes is 33.5%–35.6%, confirming balanced representation across all performance tiers."
 )
 
-add_heading_2(doc, "e.4 Longitudinal Time Series Forecasting (Student #2)")
+add_heading_2(doc, "e.3 Longitudinal Time Series Forecasting (Student #2)")
 add_body_p(
     doc,
-    "Student #2 completed 45 total courses across eight semesters, generating average semester final exam scores of: 66.13 (Sem 1), 90.73 (Sem 2), 88.86 (Sem 3), 81.42 (Sem 4), 73.47 (Sem 5), 78.41 (Sem 6), 72.22 (Sem 7), and 82.70 (Sem 8). Evaluating forecasts on the held-out test semesters (Semesters 7 & 8) produced the results in Table 3 and Figure 8."
+    "Student #2 completed 45 courses across 8 semesters, producing average semester final exam scores of: 66.13, 93.58, 88.86, 81.36, 73.47, 78.41, 72.22, and 82.70. Table 4 benchmarks the multi-step forecasts evaluated on the held-out test semesters (Semesters 7 & 8)."
 )
 
 # Time Series Table
 ts_tbl = doc.add_table(rows=4, cols=4)
 ts_tbl.alignment = WD_TABLE_ALIGNMENT.CENTER
-headers_ts = ["Forecasting Architecture", "Test RMSE (Score Pts)", "Test MAE (Score Pts)", "MAPE (%)"]
-for j, h in enumerate(headers_ts):
+for j, h in enumerate(["Forecasting Model Architecture", "Test RMSE (Points)", "Test MAE (Points)", "Test MAPE (%)"]):
     c = ts_tbl.cell(0, j)
     set_cell_shading(c, HEX_PRIMARY)
-    set_cell_margins(c, 80, 80, 100, 100)
+    set_cell_margins(c, 60, 60, 80, 80)
     p = c.paragraphs[0]
     p.paragraph_format.space_after = Pt(0)
     r = p.add_run(h)
     r.font.name = 'Arial'
-    r.font.size = Pt(9)
+    r.font.size = Pt(8.5)
     r.font.bold = True
     r.font.color.rgb = RGBColor(255, 255, 255)
 
 ts_rows = [
-    ("Simple Exponential Smoothing", f"{results['time_series_metrics']['Exponential Smoothing']['RMSE']:.4f}", f"{results['time_series_metrics']['Exponential Smoothing']['MAE']:.4f}", f"{results['time_series_metrics']['Exponential Smoothing']['MAPE']:.2f}%"),
+    ("Simple Exponential Smoothing (SES)", f"{results['time_series_metrics']['Simple Exponential Smoothing']['RMSE']:.4f}", f"{results['time_series_metrics']['Simple Exponential Smoothing']['MAE']:.4f}", f"{results['time_series_metrics']['Simple Exponential Smoothing']['MAPE']:.2f}%"),
     ("ARIMA(1, 0, 0) Autoregressive", f"{results['time_series_metrics']['ARIMA(1,0,0)']['RMSE']:.4f}", f"{results['time_series_metrics']['ARIMA(1,0,0)']['MAE']:.4f}", f"{results['time_series_metrics']['ARIMA(1,0,0)']['MAPE']:.2f}%"),
-    ("Persistence Baseline (Lag-1)", f"{results['time_series_metrics']['Naive Lag-1']['RMSE']:.4f}", f"{results['time_series_metrics']['Naive Lag-1']['MAE']:.4f}", f"{results['time_series_metrics']['Naive Lag-1']['MAPE']:.2f}%")
+    ("Naive Persistence Baseline (Lag-1)", f"{results['time_series_metrics']['Naive Persistence (Lag-1)']['RMSE']:.4f}", f"{results['time_series_metrics']['Naive Persistence (Lag-1)']['MAE']:.4f}", f"{results['time_series_metrics']['Naive Persistence (Lag-1)']['MAPE']:.2f}%")
 ]
 for i, row in enumerate(ts_rows):
     row_bg = HEX_ALT_ROW if i % 2 == 1 else "FFFFFF"
     for j, val in enumerate(row):
         c = ts_tbl.cell(i+1, j)
         set_cell_shading(c, row_bg)
-        set_cell_margins(c, 70, 70, 100, 100)
+        set_cell_margins(c, 50, 50, 80, 80)
         p = c.paragraphs[0]
         p.paragraph_format.space_after = Pt(0)
         r = p.add_run(val)
@@ -662,88 +559,67 @@ for i, row in enumerate(ts_rows):
         r.font.color.rgb = COLOR_DARK
 
 doc.add_paragraph().paragraph_format.space_after = Pt(6)
-add_figure(doc, "figures/fig8_student_forecasting.png", "Figure 8: Student #2 Longitudinal Semester Trajectory and Multi-Step Forecast Comparison")
+add_figure(doc, "figures/fig8_student_forecasting.png", "Figure 6: Student #2 Longitudinal Observed Trajectory and Multi-Step Forecast Comparison")
+
+add_body_p(
+    doc,
+    "Critical Low-N Forecasting Limitations: Naive persistence achieved the lowest test RMSE (5.3267), outperforming Simple Exponential Smoothing (5.9621) and ARIMA(1,0,0) (6.4736). This occurs because fitting parametric time-series models on merely six training observations (N=6) introduces severe parameter estimation variance. In such small sample regimes, estimating autoregressive coefficients phi_1 or level weights alpha incurs high standard errors; predicting the last observed semester score (y_6 = 78.41) introduces zero parameter variance, proving superior on short horizons. This small single-student experiment illustrates temporal trajectory visualization but does not constitute proof of dependable standalone time-series forecasting. Robust institutional forecasting requires pooled longitudinal panel models across cohorts [7], [8]."
+)
 
 # ==================== SECTION F ====================
 add_heading_1(doc, "Section f: Model Interpretation & Influential Academic Drivers")
-
-add_heading_2(doc, "f.1 Feature Importance Hierarchy")
 add_body_p(
     doc,
-    "To open the 'black box' of ensemble tree algorithms, split gain importance was extracted from the optimized LightGBM model across all engineered features. Figure 9 highlights the top 12 most influential drivers:"
+    "To provide rigorous model interpretability, Figure 7 decomposes tree behavior into Total Gain (total impurity reduction) and Split Frequency (branch count)."
 )
-add_figure(doc, "figures/fig9_feature_importance.png", "Figure 9: Top 12 Most Influential Features Extracted from Tuned LightGBM Regressor")
+add_figure(doc, "figures/fig9_feature_importance.png", "Figure 7: Top 12 Academic Drivers by Total Gain (Impurity Reduction) vs. Split Frequency")
 
 add_body_p(
     doc,
-    "1. Formative Homework Performance (homework_avg & attendance_hw_composite): Consistently ranks as the single most dominant factor in final examination success (gain share > 28%). Students who maintain steady weekly homework completion develop the mastery required for summative exam success."
+    "1. Formative Homework Performance (homework_avg & attendance_hw_composite): Dominates Gain Importance (>80% of total loss reduction). Continuous formative task completion is the primary causal driver of exam success."
 )
 add_body_p(
     doc,
-    "2. Longitudinal Momentum (final_exam_prev_semester & homework_avg_prev_semester): Prior-semester performance indicators occupy the second tier of importance (gain share ~ 22%). This confirms the educational hypothesis of academic inertia—students carry forward foundational knowledge and study habits from semester to semester."
+    "2. Cumulative Baseline GPA (prior_gpa_cleaned): Represents the second largest gain contributor, capturing long-term academic capability."
 )
 add_body_p(
     doc,
-    "3. Study Engagement Ratios (study_hours_per_credit & attendance_prev_semester): The ratio of weekly study hours to enrolled course credits demonstrates higher predictive power than raw study hours alone, confirming that study effort must scale proportionally with academic workload."
+    "3. Study Effort Allocation (study_hours_cleaned & study_hours_per_credit): Workload-scaled study hours exhibit high split frequency, acting as key moderator variables for borderline students."
 )
 add_body_p(
     doc,
-    "4. Prior Cumulative GPA (prior_gpa_cleaned): Serves as a significant stabilizing baseline, distinguishing chronically struggling students from those experiencing temporary setbacks."
+    "4. Temporal Momentum (final_exam_prev_semester & attendance_prev_semester): Prior-semester metrics contribute consistent split frequency across trees, stabilizing predictions across academic years."
 )
 
 # ==================== SECTION G ====================
-add_heading_1(doc, "Section g: Practical Implications, Ethical AI & Limitations")
-
-add_heading_2(doc, "g.1 Practical Deployment in University Advising Systems")
+add_heading_1(doc, "Section g: Practical Implications, Ethical Considerations & Limitations")
 add_body_p(
     doc,
-    "The models developed in this investigation can be operationalized as an Early Warning Decision Support System (EWDSS) integrated with university Learning Management Systems (e.g., Moodle, Canvas). By running predictions during Week 4 and Week 8 of a semester using incoming homework averages, attendance logs, and prior semester metrics, the system can automatically flag students whose predicted final exam score drops below 60 or whose predicted letter grade is 'D' or 'F'."
+    "Practical Educational Deployment: The trained models can be integrated into institutional learning management systems (e.g., Moodle) as an Early Warning Decision Support System. Automated intervention alerts can notify academic advisors when a student's predicted final exam score drops below 60 or predicted grade is 'D'/'F' by Week 6, triggering tutoring and advising."
 )
 add_body_p(
     doc,
-    "Academic advisors can receive automated intervention alerts, allowing them to schedule targeted tutoring, peer mentoring, or study skills workshops well before final examinations. This shifts academic support from reactive failure auditing to proactive student success facilitation."
+    "Ethical Governance & Algorithmic Guardrails: Predictive models must function exclusively as supportive diagnostic flags, never as deterministic barriers to enrollment or financial aid. Demographic attributes (gender, age) exhibited negligible predictive importance (|r| < 0.05), preventing biased stereotyping [3]."
 )
-
-add_heading_2(doc, "g.2 Ethical Considerations & Algorithmic Fairness")
 add_body_p(
     doc,
-    "Deploying machine learning models in higher education requires careful ethical governance [3]:"
+    "Methodological Limitations: The dataset lacks intra-semester LMS telemetry (submission timestamps, forum engagement) and unobserved psychosocial indicators (financial stress, working hours). Furthermore, single-student time series forecasting is fundamentally constrained by low temporal observations (N=6)."
 )
-add_body_p(doc, "• Demographic Non-Discrimination: In accordance with algorithmic fairness standards, demographic attributes (gender, age) demonstrated minimal predictive weight in our models (|r| < 0.05), preventing biased stereotyping.")
-add_body_p(doc, "• Preserving Student Agency: Predictive scores should never be used deterministically to bar students from courses or scholarships. Instead, they should function exclusively as supportive diagnostic flags.")
-add_body_p(doc, "• Data Privacy & FERPA/GDPR Compliance: Predictive pipelines must operate under strict role-based access control, anonymizing student identities (e.g., hashed student_id) during modeling.")
-
-add_heading_2(doc, "g.3 Pipeline Limitations & Future Directions")
-add_body_p(
-    doc,
-    "While the pipeline demonstrates high robustness, several institutional limitations should be addressed in future work:"
-)
-add_body_p(doc, "1. Unobserved Socioeconomic & Psychological Factors: The dataset does not capture mental health indicators, financial stress, or employment obligations outside university, which substantially affect academic performance.")
-add_body_p(doc, "2. Fine-Grained LMS Clickstream Telemetry: Incorporating timestamped LMS interaction logs (e.g., lecture video views, forum participation, assignment submission timeliness) would allow continuous intra-semester updates.")
-add_body_p(doc, "3. Deep Sequential Architectures: As institutions collect 10+ semesters of student histories, Recurrent Neural Networks (LSTMs) or Transformer-based sequence models could capture multi-year curricular dependency graphs.")
 
 # ==================== SECTION H ====================
-add_heading_1(doc, "Section h: Summary of Overall Findings & Final Reflections")
-
+add_heading_1(doc, "Section h: Summary of Findings & Final Reflections")
 add_body_p(
     doc,
-    "This investigation successfully designed, executed, and benchmarked an end-to-end machine learning pipeline for educational performance analytics, fulfilling every technical objective of the IT7103 specification. Key takeaways include:"
+    "This investigation engineered and validated an end-to-end educational analytics pipeline adhering strictly to professional machine learning standards:"
 )
-add_body_p(doc, "• Data Integrity is Paramount: The discovery and removal of 780 corrupted 'ERR' synthetic records and the winsorization of 762 invalid GPA values prevented significant model contamination.")
-add_body_p(doc, "• Temporal Engineering Yields Substantial Lift: Creating longitudinal lag features (prior-semester exam averages, attendance, and study-to-credit ratios) provided the predictive signals necessary to model performance across semesters.")
-add_body_p(doc, "• Leakage Elimination Guarantees Genuine Forecasting: Rigorously excluding numeric_grade preserved methodological validity, preventing circular target leakage.")
-add_body_p(doc, "• Imbalance Mitigation Enables Real-World Intervention: Cost-sensitive class balancing boosted minority failure recall from 0% to 34.4%, ensuring that at-risk students are actively detected.")
-add_body_p(doc, "• Student Trajectory Tracking is Viable: Time series forecasting for Student #2 using Exponential Smoothing achieved an RMSE of 5.75 points, proving that longitudinal tracking provides dependable guidance for personalized degree planning.")
-
-add_body_p(
-    doc,
-    "In conclusion, the proposed machine learning solution bridges the gap between academic data collection and operational student support, providing educational institutions with a scientifically grounded, ethical tool to foster student achievement and academic retention."
-)
+add_body_p(doc, "• Preprocessing Leakage Avoidance: Chronological partitioning (Sem 1–6 Train, Sem 7–8 Test) and pre-split pipeline fitting guaranteed valid generalization.")
+add_body_p(doc, "• Target Integrity: Eliminating numeric_grade and avoiding target imputation preserved ground-truth statistical validity.")
+add_body_p(doc, "• Transparent Model Benchmarking: Honest reporting established that regularized Ridge regression performs on par with gradient boosted trees, while Naive persistence outperforms ARIMA on low-N individual trajectories.")
+add_body_p(doc, "• Early Warning Efficacy: Cost-sensitive class balancing elevated minority failing grade ('F') recall from 0.0% to 41.8%–42.5%, providing operational value for academic advising.")
 
 # ==================== REFERENCES ====================
 doc.add_page_break()
 add_heading_1(doc, "References")
-
 references = [
     "[1] C. Romero and S. Ventura, \"Educational data mining and learning analytics: An updated survey,\" WIREs Data Mining and Knowledge Discovery, vol. 10, no. 3, p. e1355, 2020.",
     "[2] G. Siemens and R. S. J. d. Baker, \"Learning analytics and educational data mining: towards communication and collaboration,\" in Proc. 2nd Int. Conf. on Learning Analytics and Knowledge (LAK '12), Vancouver, BC, Canada, 2012, pp. 252–254.",
@@ -758,7 +634,6 @@ references = [
     "[11] F. Pedregosa et al., \"Scikit-learn: Machine learning in Python,\" Journal of Machine Learning Research, vol. 12, pp. 2825–2830, 2011.",
     "[12] Bahrain Polytechnic, \"Academic Quality and Assessment Regulations Handbook,\" Curriculum and Academic Services, Manama, Kingdom of Bahrain, 2023."
 ]
-
 for ref in references:
     p = doc.add_paragraph()
     p.paragraph_format.space_after = Pt(4)
@@ -767,9 +642,9 @@ for ref in references:
     p.paragraph_format.first_line_indent = Inches(-0.3)
     r = p.add_run(ref)
     r.font.name = 'Arial'
-    r.font.size = Pt(9.5)
+    r.font.size = Pt(9)
     r.font.color.rgb = COLOR_DARK
 
 doc_out_path = 'Project_Report_IT7103.docx'
 doc.save(doc_out_path)
-print(f"Academic Project Report successfully generated and saved at: {doc_out_path}")
+print(f"Revised Academic Project Report successfully generated at: {doc_out_path}")

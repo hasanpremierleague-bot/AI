@@ -1,0 +1,163 @@
+{
+  "dataset_stats": {
+    "raw_rows": 154314,
+    "clean_rows": 153534,
+    "dropped_err_count": 780,
+    "cleaned_gpa_count": 762,
+    "extreme_study_count": 1419
+  },
+  "regression_results": {
+    "Ridge Regression": {
+      "RMSE": 7.885,
+      "MAE": 6.3231,
+      "R2": 0.3639,
+      "MAPE": 7.9826
+    },
+    "Decision Tree": {
+      "RMSE": 7.9393,
+      "MAE": 6.3677,
+      "R2": 0.3552,
+      "MAPE": 8.0382
+    },
+    "Random Forest": {
+      "RMSE": 7.9072,
+      "MAE": 6.3466,
+      "R2": 0.3604,
+      "MAPE": 8.012
+    },
+    "LightGBM": {
+      "RMSE": 7.8946,
+      "MAE": 6.3375,
+      "R2": 0.3624,
+      "MAPE": 8.0016
+    },
+    "XGBoost": {
+      "RMSE": 7.9089,
+      "MAE": 6.3489,
+      "R2": 0.3601,
+      "MAPE": 8.0154
+    },
+    "Voting Ensemble": {
+      "RMSE": 7.8965,
+      "MAE": 6.3393,
+      "R2": 0.3621,
+      "MAPE": 8.0035
+    }
+  },
+  "classification_results": {
+    "Multinomial LogReg": {
+      "Accuracy": 0.2918,
+      "Precision_Macro": 0.2766,
+      "Recall_Macro": 0.3531,
+      "F1_Macro": 0.2862,
+      "F1_Weighted": 0.2872
+    },
+    "Decision Tree": {
+      "Accuracy": 0.2944,
+      "Precision_Macro": 0.2899,
+      "Recall_Macro": 0.349,
+      "F1_Macro": 0.2921,
+      "F1_Weighted": 0.2929
+    },
+    "Random Forest (Balanced)": {
+      "Accuracy": 0.2915,
+      "Precision_Macro": 0.296,
+      "Recall_Macro": 0.3441,
+      "F1_Macro": 0.3054,
+      "F1_Weighted": 0.2849
+    },
+    "LightGBM Classifier": {
+      "Accuracy": 0.2976,
+      "Precision_Macro": 0.2957,
+      "Recall_Macro": 0.3401,
+      "F1_Macro": 0.3076,
+      "F1_Weighted": 0.2956
+    },
+    "XGBoost Classifier": {
+      "Accuracy": 0.3436,
+      "Precision_Macro": 0.334,
+      "Recall_Macro": 0.294,
+      "F1_Macro": 0.2764,
+      "F1_Weighted": 0.3024
+    }
+  },
+  "time_series_metrics": {
+    "Exponential Smoothing": {
+      "RMSE": 5.7546,
+      "MAE": 5.2408,
+      "MAPE": 7.0056
+    },
+    "ARIMA(1,0,0)": {
+      "RMSE": 6.0604,
+      "MAE": 5.3766,
+      "MAPE": 7.2185
+    },
+    "Naive Lag-1": {
+      "RMSE": 5.3267,
+      "MAE": 5.2408,
+      "MAPE": 6.8807
+    }
+  },
+  "tuning_comparison": {
+    "Default LightGBM": {
+      "RMSE": 7.8946,
+      "MAE": 6.3375,
+      "R2": 0.3624,
+      "MAPE": 8.0016
+    },
+    "Tuned LightGBM": {
+      "RMSE": 7.8878,
+      "MAE": 6.3321,
+      "R2": 0.3635,
+      "MAPE": 7.9953
+    },
+    "Best Parameters": {
+      "learning_rate": 0.03,
+      "max_depth": 4,
+      "n_estimators": 200,
+      "subsample": 0.8
+    }
+  },
+  "student_2_history": [
+    {
+      "sem_num": 1,
+      "semester": "2020Spring",
+      "final_exam": 66.13
+    },
+    {
+      "sem_num": 2,
+      "semester": "2020Fall",
+      "final_exam": 90.725
+    },
+    {
+      "sem_num": 3,
+      "semester": "2021Spring",
+      "final_exam": 88.86
+    },
+    {
+      "sem_num": 4,
+      "semester": "2021Fall",
+      "final_exam": 81.41833333333334
+    },
+    {
+      "sem_num": 5,
+      "semester": "2022Spring",
+      "final_exam": 73.47
+    },
+    {
+      "sem_num": 6,
+      "semester": "2022Fall",
+      "final_exam": 78.412
+    },
+    {
+      "sem_num": 7,
+      "semester": "2023Spring",
+      "final_exam": 72.21833333333333
+    },
+    {
+      "sem_num": 8,
+      "semester": "2023Fall",
+      "final_exam": 82.7
+    }
+  ]
+}
