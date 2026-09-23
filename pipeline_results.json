@@ -1,329 +1,630 @@
 {
-  "dataset_stats": {
+  "dataset": {
     "raw_rows": 154314,
     "clean_rows": 153534,
-    "dropped_err_count": 780,
-    "cleaned_gpa_count": 762,
-    "extreme_study_count": 1419,
+    "students": 6000,
+    "raw_observed_exams": 143562,
+    "clean_observed_exams": 142825,
+    "missing_exams_clean": 10709,
+    "bad_gpa_clean": 760,
+    "study_hours_capped": 1415,
     "train_rows": 115109,
     "test_rows": 38425,
-    "train_reg_observed_y": 107111,
-    "test_reg_observed_y": 35714
+    "reg_train_rows": 107111,
+    "reg_test_rows": 35714
   },
-  "ablation_study": {
-    "Ridge": {
-      "Raw_RMSE": 8.0507,
-      "Engineered_RMSE": 8.051,
-      "Delta": -0.0003
+  "correlations": {
+    "final_exam": 1.0,
+    "numeric_grade": 0.7518359576537083,
+    "prior_gpa_cleaned": 0.11210512308838073,
+    "study_hours_cleaned": 0.06296668415975412,
+    "attendance_rate": 0.036800637335559196,
+    "homework_avg": 0.6396976539126865,
+    "final_exam_prev_semester": 0.01508574727463747,
+    "homework_avg_prev_semester": 0.0173533451510912,
+    "attendance_prev_semester": 0.0015993776783612696,
+    "homework_rolling2_mean": 0.021795324173686622,
+    "attendance_rolling2_mean": -0.0018418443181350014,
+    "study_hours_per_credit": 0.0612977646257297
+  },
+  "cohort": {
+    "final_exam": {
+      "2020Spring": 81.81298834060894,
+      "2020Fall": 81.76965455799517,
+      "2021Spring": 81.73203853842737,
+      "2021Fall": 81.85776362309893,
+      "2022Spring": 81.81184290540541,
+      "2022Fall": 81.77774973653558,
+      "2023Spring": 81.78153928652065,
+      "2023Fall": 81.84942160240026
     },
-    "LightGBM": {
-      "Raw_RMSE": 8.0576,
-      "Engineered_RMSE": 8.0564,
-      "Delta": 0.0012
+    "homework_avg": {
+      "2020Spring": 81.90743845089904,
+      "2020Fall": 81.83891389207807,
+      "2021Spring": 81.71616879511382,
+      "2021Fall": 81.90813016354747,
+      "2022Spring": 81.94736966691089,
+      "2022Fall": 81.8907921725151,
+      "2023Spring": 81.87047128957877,
+      "2023Fall": 81.82942187240175
+    },
+    "attendance_rate": {
+      "2020Spring": 83.80643731649216,
+      "2020Fall": 83.82287491361437,
+      "2021Spring": 83.74815760266371,
+      "2021Fall": 83.7157726045884,
+      "2022Spring": 83.70848447414228,
+      "2022Fall": 83.79973367363924,
+      "2023Spring": 83.6982813028288,
+      "2023Fall": 83.70873267657372
     }
   },
-  "regression_results": {
+  "regression": {
+    "Mean baseline": {
+      "RMSE": 10.295979821141067,
+      "MAE": 8.367216262619609,
+      "R2": -4.5994069084454026e-06,
+      "MAPE (%)": 10.646718313831355
+    },
     "Ridge Regression": {
-      "RMSE": 8.051,
-      "MAE": 6.4637,
-      "R2": 0.3885,
-      "MAPE": 8.1719
+      "RMSE": 8.05103523803787,
+      "MAE": 6.463656416978323,
+      "R2": 0.3885371348174438,
+      "MAPE (%)": 8.171929186296992
     },
     "Decision Tree": {
-      "RMSE": 8.1322,
-      "MAE": 6.5261,
-      "R2": 0.3761,
-      "MAPE": 8.2529
+      "RMSE": 8.132241500824613,
+      "MAE": 6.526080063877448,
+      "R2": 0.3761399630955866,
+      "MAPE (%)": 8.252875066351557
     },
     "Random Forest": {
-      "RMSE": 8.0742,
-      "MAE": 6.4896,
-      "R2": 0.385,
-      "MAPE": 8.2022
+      "RMSE": 8.074220173424438,
+      "MAE": 6.489645199774592,
+      "R2": 0.3850103486871501,
+      "MAPE (%)": 8.202227446454
     },
     "LightGBM": {
-      "RMSE": 8.0603,
-      "MAE": 6.4748,
-      "R2": 0.3871,
-      "MAPE": 8.1864
+      "RMSE": 8.060315701370262,
+      "MAE": 6.474797820176427,
+      "R2": 0.38712665054220374,
+      "MAPE (%)": 8.186375637445261
     },
     "XGBoost": {
-      "RMSE": 8.0764,
-      "MAE": 6.4862,
-      "R2": 0.3847,
-      "MAPE": 8.1995
+      "RMSE": 8.076430335497367,
+      "MAE": 6.486200473945832,
+      "R2": 0.38467361949115564,
+      "MAPE (%)": 8.1995185991437
     },
     "Voting Ensemble": {
-      "RMSE": 8.0613,
-      "MAE": 6.4754,
-      "R2": 0.387,
-      "MAPE": 8.1861
+      "RMSE": 8.061304401789819,
+      "MAE": 6.475421247676422,
+      "R2": 0.38697628787061,
+      "MAPE (%)": 8.186141354000105
     }
   },
-  "classification_results": {
+  "classification": {
+    "Majority baseline": {
+      "Overall Acc": 0.18227716330513988,
+      "Macro Precision": 0.01822771633051399,
+      "Macro Recall": 0.1,
+      "Macro F1": 0.030834929230227386,
+      "Class F Recall": 0.0,
+      "Class F Precision": 0.0
+    },
     "Multinomial LogReg (Unweighted)": {
-      "Accuracy": 0.3444,
-      "Precision_Macro": 0.3329,
-      "Recall_Macro": 0.3004,
-      "F1_Macro": 0.2724,
-      "F1_Weighted": 0.2922,
-      "Class_F_Recall": 0.137,
-      "Class_F_Precision": 0.6452,
-      "Class_F_F1": 0.226
+      "Overall Acc": 0.34438516590761226,
+      "Macro Precision": 0.3328568537010273,
+      "Macro Recall": 0.30036399885252557,
+      "Macro F1": 0.2724247489714392,
+      "Class F Recall": 0.136986301369863,
+      "Class F Precision": 0.6451612903225806
     },
     "Multinomial LogReg (Balanced)": {
-      "Accuracy": 0.2934,
-      "Precision_Macro": 0.2782,
-      "Recall_Macro": 0.3568,
-      "F1_Macro": 0.2879,
-      "F1_Weighted": 0.289,
-      "Class_F_Recall": 0.774,
-      "Class_F_Precision": 0.1112,
-      "Class_F_F1": 0.1945
+      "Overall Acc": 0.2933767078724789,
+      "Macro Precision": 0.2781694933363103,
+      "Macro Recall": 0.356806769580594,
+      "Macro F1": 0.28794892460182864,
+      "Class F Recall": 0.773972602739726,
+      "Class F Precision": 0.11122047244094488
     },
     "Decision Tree (Unweighted)": {
-      "Accuracy": 0.3397,
-      "Precision_Macro": 0.3576,
-      "Recall_Macro": 0.2974,
-      "F1_Macro": 0.2881,
-      "F1_Weighted": 0.3012,
-      "Class_F_Recall": 0.1781,
-      "Class_F_Precision": 0.5652,
-      "Class_F_F1": 0.2708
+      "Overall Acc": 0.3397267404033832,
+      "Macro Precision": 0.357580733570437,
+      "Macro Recall": 0.2974465963846451,
+      "Macro F1": 0.2880834849836573,
+      "Class F Recall": 0.1780821917808219,
+      "Class F Precision": 0.5652173913043478
     },
     "Decision Tree (Balanced)": {
-      "Accuracy": 0.2927,
-      "Precision_Macro": 0.2762,
-      "Recall_Macro": 0.3497,
-      "F1_Macro": 0.2811,
-      "F1_Weighted": 0.2853,
-      "Class_F_Recall": 0.6507,
-      "Class_F_Precision": 0.0814,
-      "Class_F_F1": 0.1447
+      "Overall Acc": 0.29270006506180873,
+      "Macro Precision": 0.2762255541821045,
+      "Macro Recall": 0.34972135542855176,
+      "Macro F1": 0.28107983088873745,
+      "Class F Recall": 0.6506849315068494,
+      "Class F Precision": 0.08140531276778064
     },
     "Random Forest (Unweighted)": {
-      "Accuracy": 0.3412,
-      "Precision_Macro": 0.3118,
-      "Recall_Macro": 0.2792,
-      "F1_Macro": 0.2413,
-      "F1_Weighted": 0.2791,
-      "Class_F_Recall": 0.0,
-      "Class_F_Precision": 0.0,
-      "Class_F_F1": 0.0
+      "Overall Acc": 0.34115810019518544,
+      "Macro Precision": 0.31184337080000785,
+      "Macro Recall": 0.27919137665239957,
+      "Macro F1": 0.24132618638159795,
+      "Class F Recall": 0.0,
+      "Class F Precision": 0.0
     },
     "Random Forest (Balanced)": {
-      "Accuracy": 0.296,
-      "Precision_Macro": 0.2996,
-      "Recall_Macro": 0.3351,
-      "F1_Macro": 0.3084,
-      "F1_Weighted": 0.2901,
-      "Class_F_Recall": 0.4178,
-      "Class_F_Precision": 0.2328,
-      "Class_F_F1": 0.299
+      "Overall Acc": 0.29600520494469745,
+      "Macro Precision": 0.29959449726995735,
+      "Macro Recall": 0.3350970322735757,
+      "Macro F1": 0.3084087846939203,
+      "Class F Recall": 0.4178082191780822,
+      "Class F Precision": 0.23282442748091603
     },
     "LightGBM (Unweighted)": {
-      "Accuracy": 0.3364,
-      "Precision_Macro": 0.3296,
-      "Recall_Macro": 0.2978,
-      "F1_Macro": 0.2881,
-      "F1_Weighted": 0.3043,
-      "Class_F_Recall": 0.1507,
-      "Class_F_Precision": 0.3548,
-      "Class_F_F1": 0.2115
+      "Overall Acc": 0.3364476252439818,
+      "Macro Precision": 0.32957263176471796,
+      "Macro Recall": 0.2978015168818432,
+      "Macro F1": 0.28805119379501515,
+      "Class F Recall": 0.1506849315068493,
+      "Class F Precision": 0.3548387096774194
     },
     "LightGBM (Balanced)": {
-      "Accuracy": 0.3008,
-      "Precision_Macro": 0.295,
-      "Recall_Macro": 0.338,
-      "F1_Macro": 0.3079,
-      "F1_Weighted": 0.2966,
-      "Class_F_Recall": 0.4247,
-      "Class_F_Precision": 0.2109,
-      "Class_F_F1": 0.2818
+      "Overall Acc": 0.30079375406636305,
+      "Macro Precision": 0.2950193418624513,
+      "Macro Recall": 0.33795648916257587,
+      "Macro F1": 0.30793532378231125,
+      "Class F Recall": 0.4246575342465753,
+      "Class F Precision": 0.2108843537414966
     }
   },
-  "time_series_metrics": {
+  "ablation": {
+    "Ridge Regression": {
+      "Raw Features RMSE": 8.05068682314062,
+      "Engineered Features RMSE": 8.05103523803787,
+      "Delta (Lift)": -0.00034841489724968255
+    },
+    "LightGBM Regressor": {
+      "Raw Features RMSE": 8.057631183570434,
+      "Engineered Features RMSE": 8.056391395961635,
+      "Delta (Lift)": 0.001239787608799503
+    }
+  },
+  "forecast": {
     "Simple Exponential Smoothing": {
-      "RMSE": 5.9621,
-      "MAE": 5.2408,
-      "MAPE": 7.0465
+      "RMSE": 5.9621111373890505,
+      "MAE": 5.240833333333335,
+      "MAPE (%)": 7.046485054585533
     },
     "ARIMA(1,0,0)": {
-      "RMSE": 6.4736,
-      "MAE": 5.4844,
-      "MAPE": 7.4147
+      "RMSE": 6.473607287982044,
+      "MAE": 5.484405528062801,
+      "MAPE (%)": 7.414744385555373
     },
     "Naive Persistence (Lag-1)": {
-      "RMSE": 5.3267,
-      "MAE": 5.2408,
-      "MAPE": 6.8807
+      "RMSE": 5.326746229067883,
+      "MAE": 5.240833333333335,
+      "MAPE (%)": 6.880657000496476
     }
   },
-  "tuning_regression": {
-    "Search_Space": {
-      "n_estimators": [
-        100,
-        200
-      ],
-      "learning_rate": [
-        0.03,
-        0.08
-      ],
-      "max_depth": [
-        4,
-        6
-      ],
-      "subsample": [
-        0.8,
-        1.0
-      ]
-    },
-    "Best_Params": {
-      "learning_rate": 0.03,
-      "max_depth": 4,
-      "n_estimators": 200,
-      "subsample": 0.8
-    },
-    "Baseline_LightGBM": {
-      "RMSE": 8.0603,
-      "MAE": 6.4748,
-      "R2": 0.3871,
-      "MAPE": 8.1864
-    },
-    "Tuned_LightGBM": {
-      "RMSE": 8.0528,
-      "MAE": 6.4695,
-      "R2": 0.3883,
-      "MAPE": 8.1797
-    }
-  },
-  "tuning_classification": {
-    "Search_Space": {
-      "n_estimators": [
-        100,
-        150
-      ],
-      "max_depth": [
-        10,
-        14
-      ],
-      "min_samples_split": [
-        2,
-        5
-      ]
-    },
-    "Best_Params": {
-      "max_depth": 14,
-      "min_samples_split": 5,
-      "n_estimators": 150
-    },
-    "Baseline_RF": {
-      "Accuracy": 0.296,
-      "Precision_Macro": 0.2996,
-      "Recall_Macro": 0.3351,
-      "F1_Macro": 0.3084,
-      "F1_Weighted": 0.2901,
-      "Class_F_Recall": 0.4178,
-      "Class_F_Precision": 0.2328,
-      "Class_F_F1": 0.299
-    },
-    "Tuned_RF": {
-      "Accuracy": 0.3031,
-      "F1_Macro": 0.3077,
-      "Class_F_Recall": 0.2329,
-      "Class_F_Precision": 0.2677
-    }
-  },
-  "student_2_history": [
+  "student_history": [
     {
       "sem_num": 1,
       "semester": "2020Spring",
-      "final_exam": 66.13
+      "course_count": 1,
+      "observed_exam_count": 1,
+      "final_exam": 66.13,
+      "homework_avg": 62.13,
+      "attendance_rate": 43.5
     },
     {
       "sem_num": 2,
       "semester": "2020Fall",
-      "final_exam": 93.57666666666667
+      "course_count": 4,
+      "observed_exam_count": 3,
+      "final_exam": 93.57666666666667,
+      "homework_avg": 88.695,
+      "attendance_rate": 84.775
     },
     {
       "sem_num": 3,
       "semester": "2021Spring",
-      "final_exam": 88.86
+      "course_count": 5,
+      "observed_exam_count": 5,
+      "final_exam": 88.86,
+      "homework_avg": 85.936,
+      "attendance_rate": 80.925
     },
     {
       "sem_num": 4,
       "semester": "2021Fall",
-      "final_exam": 81.362
+      "course_count": 6,
+      "observed_exam_count": 5,
+      "final_exam": 81.362,
+      "homework_avg": 83.91166666666668,
+      "attendance_rate": 84.5
     },
     {
       "sem_num": 5,
       "semester": "2022Spring",
-      "final_exam": 73.47
+      "course_count": 1,
+      "observed_exam_count": 1,
+      "final_exam": 73.47,
+      "homework_avg": 94.44,
+      "attendance_rate": 100.0
     },
     {
       "sem_num": 6,
       "semester": "2022Fall",
-      "final_exam": 78.412
+      "course_count": 5,
+      "observed_exam_count": 5,
+      "final_exam": 78.412,
+      "homework_avg": 80.146,
+      "attendance_rate": 91.94
     },
     {
       "sem_num": 7,
       "semester": "2023Spring",
-      "final_exam": 72.21833333333333
+      "course_count": 6,
+      "observed_exam_count": 6,
+      "final_exam": 72.21833333333333,
+      "homework_avg": 70.42,
+      "attendance_rate": 85.13333333333334
     },
     {
       "sem_num": 8,
       "semester": "2023Fall",
-      "final_exam": 82.7
+      "course_count": 5,
+      "observed_exam_count": 5,
+      "final_exam": 82.7,
+      "homework_avg": 86.74600000000001,
+      "attendance_rate": 86.38
     }
   ],
-  "top_gain_features": [
+  "folds": [
     {
-      "Feature": "homework_avg",
-      "Gain_Importance": 72081664.96089172
+      "Task": "Regression",
+      "Train semesters": "[1, 2, 3]",
+      "Validation semester": 4,
+      "Train rows": 53503,
+      "Validation rows": 17819
     },
     {
-      "Feature": "prior_gpa_cleaned",
-      "Gain_Importance": 466731.97776794434
+      "Task": "Regression",
+      "Train semesters": "[1, 2, 3, 4]",
+      "Validation semester": 5,
+      "Train rows": 71322,
+      "Validation rows": 17760
     },
     {
-      "Feature": "study_hours_cleaned",
-      "Gain_Importance": 139088.8782196045
+      "Task": "Regression",
+      "Train semesters": "[1, 2, 3, 4, 5]",
+      "Validation semester": 6,
+      "Train rows": 89082,
+      "Validation rows": 18029
     },
     {
-      "Feature": "attendance_hw_composite",
-      "Gain_Importance": 106417.19396972656
+      "Task": "Classification",
+      "Train semesters": "[1, 2, 3]",
+      "Validation semester": 4,
+      "Train rows": 57533,
+      "Validation rows": 19140
     },
     {
-      "Feature": "study_hours_per_credit",
-      "Gain_Importance": 82260.95693969727
+      "Task": "Classification",
+      "Train semesters": "[1, 2, 3, 4]",
+      "Validation semester": 5,
+      "Train rows": 76673,
+      "Validation rows": 19076
     },
     {
-      "Feature": "final_exam_prev_semester",
-      "Gain_Importance": 60231.50407409668
-    },
-    {
-      "Feature": "attendance_rolling2_mean",
-      "Gain_Importance": 58223.85020446777
-    },
-    {
-      "Feature": "homework_rolling2_mean",
-      "Gain_Importance": 57017.80986022949
-    },
-    {
-      "Feature": "homework_avg_prev_semester",
-      "Gain_Importance": 48684.830169677734
-    },
-    {
-      "Feature": "attendance_rate",
-      "Gain_Importance": 47200.95701599121
-    },
-    {
-      "Feature": "attendance_prev_semester",
-      "Gain_Importance": 42545.85810852051
-    },
-    {
-      "Feature": "year_of_study_Sophomore",
-      "Gain_Importance": 12088.818969726562
+      "Task": "Classification",
+      "Train semesters": "[1, 2, 3, 4, 5]",
+      "Validation semester": 6,
+      "Train rows": 95749,
+      "Validation rows": 19360
     }
-  ]
+  ],
+  "tuning_regression": {
+    "Baseline LightGBM": {
+      "RMSE": 8.060315701370262,
+      "MAE": 6.474797820176427,
+      "R2": 0.38712665054220374,
+      "MAPE (%)": 8.186375637445261
+    },
+    "Tuned LightGBM": {
+      "RMSE": 8.053365329916781,
+      "MAE": 6.469897587830927,
+      "R2": 0.3881831503201578,
+      "MAPE (%)": 8.180342069831099
+    }
+  },
+  "tuning_classification": {
+    "Baseline balanced RF": {
+      "Overall Acc": 0.29600520494469745,
+      "Macro Precision": 0.29959449726995735,
+      "Macro Recall": 0.3350970322735757,
+      "Macro F1": 0.3084087846939203,
+      "Class F Recall": 0.4178082191780822,
+      "Class F Precision": 0.23282442748091603
+    },
+    "Tuned balanced RF": {
+      "Overall Acc": 0.3025634352635003,
+      "Macro Precision": 0.3065718083544354,
+      "Macro Recall": 0.34152279094349014,
+      "Macro F1": 0.3172374922306559,
+      "Class F Recall": 0.4383561643835616,
+      "Class F Precision": 0.26337448559670784
+    }
+  },
+  "reg_best_params": {
+    "model__learning_rate": 0.03,
+    "model__max_depth": 4,
+    "model__n_estimators": 200
+  },
+  "clf_best_params": {
+    "model__max_depth": 14,
+    "model__min_samples_leaf": 5,
+    "model__n_estimators": 100
+  },
+  "reg_search": {
+    "model__n_estimators": [
+      100,
+      200
+    ],
+    "model__learning_rate": [
+      0.03,
+      0.08
+    ],
+    "model__max_depth": [
+      4,
+      6
+    ]
+  },
+  "clf_search": {
+    "model__n_estimators": [
+      100
+    ],
+    "model__max_depth": [
+      10,
+      14
+    ],
+    "model__min_samples_leaf": [
+      1,
+      5
+    ]
+  },
+  "reg_cv_rmse": 8.057389421077003,
+  "clf_cv_f1": 0.313151217322233,
+  "importance": [
+    {
+      "Feature": "num__homework_avg",
+      "Split_Importance": 1141,
+      "Gain_Importance": 72075711.27008057,
+      "Gain_share": 0.9838298184016568
+    },
+    {
+      "Feature": "num__prior_gpa_cleaned",
+      "Split_Importance": 468,
+      "Gain_Importance": 474399.12256622314,
+      "Gain_share": 0.006475524061848234
+    },
+    {
+      "Feature": "num__study_hours_cleaned",
+      "Split_Importance": 212,
+      "Gain_Importance": 140147.85404968262,
+      "Gain_share": 0.0019130111291224589
+    },
+    {
+      "Feature": "num__attendance_hw_composite",
+      "Split_Importance": 187,
+      "Gain_Importance": 100704.89413452148,
+      "Gain_share": 0.0013746167184846374
+    },
+    {
+      "Feature": "num__study_hours_per_credit",
+      "Split_Importance": 109,
+      "Gain_Importance": 79809.17573547363,
+      "Gain_share": 0.0010893912177487024
+    },
+    {
+      "Feature": "num__final_exam_prev_semester",
+      "Split_Importance": 146,
+      "Gain_Importance": 67428.58818054199,
+      "Gain_share": 0.0009203968229485996
+    },
+    {
+      "Feature": "num__homework_rolling2_mean",
+      "Split_Importance": 131,
+      "Gain_Importance": 56812.48728942871,
+      "Gain_share": 0.0007754875819880703
+    },
+    {
+      "Feature": "num__attendance_rolling2_mean",
+      "Split_Importance": 118,
+      "Gain_Importance": 54896.72378540039,
+      "Gain_share": 0.0007493375069203949
+    },
+    {
+      "Feature": "num__attendance_rate",
+      "Split_Importance": 109,
+      "Gain_Importance": 52417.27397155762,
+      "Gain_share": 0.0007154931421946934
+    },
+    {
+      "Feature": "num__homework_avg_prev_semester",
+      "Split_Importance": 108,
+      "Gain_Importance": 47119.28007507324,
+      "Gain_share": 0.0006431757931013242
+    },
+    {
+      "Feature": "num__attendance_prev_semester",
+      "Split_Importance": 81,
+      "Gain_Importance": 34293.86795043945,
+      "Gain_share": 0.00046810956539220194
+    },
+    {
+      "Feature": "cat__year_of_study_Sophomore",
+      "Split_Importance": 26,
+      "Gain_Importance": 12671.565872192383,
+      "Gain_share": 0.00017296623413383803
+    },
+    {
+      "Feature": "cat__year_of_study_Junior",
+      "Split_Importance": 23,
+      "Gain_Importance": 11063.882110595703,
+      "Gain_share": 0.00015102143198971366
+    },
+    {
+      "Feature": "cat__year_of_study_Senior",
+      "Split_Importance": 22,
+      "Gain_Importance": 10436.625061035156,
+      "Gain_share": 0.00014245940494501513
+    },
+    {
+      "Feature": "cat__gender_Other",
+      "Split_Importance": 15,
+      "Gain_Importance": 5914.08203125,
+      "Gain_share": 8.072692101524211e-05
+    },
+    {
+      "Feature": "cat__internship_1",
+      "Split_Importance": 10,
+      "Gain_Importance": 4872.724029541016,
+      "Gain_share": 6.651243688932892e-05
+    },
+    {
+      "Feature": "cat__extracurricular_6",
+      "Split_Importance": 11,
+      "Gain_Importance": 4327.293045043945,
+      "Gain_share": 5.906733149983632e-05
+    },
+    {
+      "Feature": "num__credits",
+      "Split_Importance": 12,
+      "Gain_Importance": 3980.031036376953,
+      "Gain_share": 5.4327222621209644e-05
+    },
+    {
+      "Feature": "cat__subject_area_Theory",
+      "Split_Importance": 9,
+      "Gain_Importance": 3812.852996826172,
+      "Gain_share": 5.2045250825250896e-05
+    },
+    {
+      "Feature": "cat__subject_area_Software Engineering",
+      "Split_Importance": 8,
+      "Gain_Importance": 3352.7230224609375,
+      "Gain_share": 4.5764499915633105e-05
+    },
+    {
+      "Feature": "cat__extracurricular_1",
+      "Split_Importance": 11,
+      "Gain_Importance": 3310.1229705810547,
+      "Gain_share": 4.5183011359136766e-05
+    },
+    {
+      "Feature": "cat__extracurricular_7",
+      "Split_Importance": 6,
+      "Gain_Importance": 3242.1270294189453,
+      "Gain_share": 4.425487019664591e-05
+    },
+    {
+      "Feature": "cat__gender_M",
+      "Split_Importance": 6,
+      "Gain_Importance": 3075.1859741210938,
+      "Gain_share": 4.197613322376993e-05
+    },
+    {
+      "Feature": "cat__scholarship_1",
+      "Split_Importance": 3,
+      "Gain_Importance": 1233.3160400390625,
+      "Gain_share": 1.6834701653609155e-05
+    },
+    {
+      "Feature": "cat__subject_area_Databases",
+      "Split_Importance": 3,
+      "Gain_Importance": 1060.3460083007812,
+      "Gain_share": 1.4473669456835777e-05
+    },
+    {
+      "Feature": "cat__extracurricular_3",
+      "Split_Importance": 3,
+      "Gain_Importance": 904.8970184326172,
+      "Gain_share": 1.2351798596628228e-05
+    },
+    {
+      "Feature": "cat__subject_area_Systems",
+      "Split_Importance": 3,
+      "Gain_Importance": 901.4369964599609,
+      "Gain_share": 1.2304569471461936e-05
+    },
+    {
+      "Feature": "cat__extracurricular_4",
+      "Split_Importance": 2,
+      "Gain_Importance": 885.885986328125,
+      "Gain_share": 1.209229896862033e-05
+    },
+    {
+      "Feature": "cat__subject_area_Programming",
+      "Split_Importance": 1,
+      "Gain_Importance": 489.3999938964844,
+      "Gain_share": 6.6802851978350235e-06
+    },
+    {
+      "Feature": "cat__subject_area_Algorithms",
+      "Split_Importance": 1,
+      "Gain_Importance": 425.5369873046875,
+      "Gain_share": 5.808558383480673e-06
+    },
+    {
+      "Feature": "cat__subject_area_Networks",
+      "Split_Importance": 1,
+      "Gain_Importance": 331.57000732421875,
+      "Gain_share": 4.525913852877022e-06
+    },
+    {
+      "Feature": "cat__extracurricular_5",
+      "Split_Importance": 1,
+      "Gain_Importance": 312.20001220703125,
+      "Gain_share": 4.261514397876511e-06
+    },
+    {
+      "Feature": "cat__subject_area_Data Science",
+      "Split_Importance": 0,
+      "Gain_Importance": 0.0,
+      "Gain_share": 0.0
+    },
+    {
+      "Feature": "cat__extracurricular_2",
+      "Split_Importance": 0,
+      "Gain_Importance": 0.0,
+      "Gain_share": 0.0
+    },
+    {
+      "Feature": "cat__extracurricular_8",
+      "Split_Importance": 0,
+      "Gain_Importance": 0.0,
+      "Gain_share": 0.0
+    },
+    {
+      "Feature": "cat__extracurricular_9",
+      "Split_Importance": 0,
+      "Gain_Importance": 0.0,
+      "Gain_share": 0.0
+    },
+    {
+      "Feature": "cat__extracurricular_10",
+      "Split_Importance": 0,
+      "Gain_Importance": 0.0,
+      "Gain_share": 0.0
+    }
+  ],
+  "versions": {
+    "numpy": "2.4.6",
+    "pandas": "3.0.6",
+    "scikit-learn": "1.9.1",
+    "lightgbm": "4.7.0",
+    "xgboost": "3.2.0",
+    "statsmodels": "0.15.0"
+  }
 }

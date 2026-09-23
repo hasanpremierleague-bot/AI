@@ -1,0 +1,6 @@
+revision_backup/
+revision_work/render/
+revision_work/report_figures/
+revision_work/*.log
+__pycache__/
+.ipynb_checkpoints/
